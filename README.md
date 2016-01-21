@@ -20,7 +20,7 @@ These examples assume the node is on the same PC as the one running the program.
 ###Getting the peer count
     using(var client = new RpcClient())
     {
-		string peerCount = await client.NetPeerCount();
+		var peerCount = await client.NetPeerCount();
         Console.WriteLine(peerCount);
     }
 
