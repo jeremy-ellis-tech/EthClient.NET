@@ -217,6 +217,10 @@ namespace Eth
             return EthHex.HexStringToByteArray(response.Result);
         }
 
+        /// <summary>
+        /// Returns an object object with data about the sync status or FALSE.
+        /// </summary>
+        /// <returns>n object with sync status data or FALSE, when not syncing</returns>
         public async Task<EthSyncing> EthSyncingAsync()
         {
             RpcRequest request = new RpcRequest

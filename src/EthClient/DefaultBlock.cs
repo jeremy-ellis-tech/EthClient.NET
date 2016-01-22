@@ -15,17 +15,41 @@ namespace Eth
             BlockNumber = blockNumber;
         }
 
-        public DefaultBlock(DefaultBlockParameterOption option)
+        internal DefaultBlock(DefaultBlockOption option)
         {
             Option = option;
         }
 
         public BigInteger? BlockNumber { get; private set; }
 
-        public DefaultBlockParameterOption? Option { get; private set; }
+        public DefaultBlockOption? Option { get; private set; }
+
+        public static DefaultBlock Earliest
+        {
+            get
+            {
+                return new DefaultBlock(DefaultBlockOption.Earliest);
+            }
+        }
+
+        public static DefaultBlock Latest
+        {
+            get
+            {
+                return new DefaultBlock(DefaultBlockOption.Latest);
+            }
+        }
+
+        public static DefaultBlock Pending
+        {
+            get
+            {
+                return new DefaultBlock(DefaultBlockOption.Pending);
+            }
+        }
     }
 
-    public enum DefaultBlockParameterOption
+    public enum DefaultBlockOption
     {
         Earliest,
         Latest,

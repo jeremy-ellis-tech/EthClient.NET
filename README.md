@@ -9,11 +9,9 @@ _Currently a work in progress._ Not all of the RPC methods have been implemented
     {
         ICollection<byte[]> accounts = await client.EthAccountsAsync();
 
-        var defaultBlock = new DefaultBlock(DefaultBlockParameterOption.Latest);
-
         foreach (var account in accounts)
         {
-            var balance = await client.EthGetBalanceAsync(account, defaultBlock);
+            var balance = await client.EthGetBalanceAsync(account, DefaultBlock.Latest);
             Console.WriteLine("Account: {0} - Balance: {1} wei", EthHex.ByteArrayToHexString(account), balance);
         }
     }
