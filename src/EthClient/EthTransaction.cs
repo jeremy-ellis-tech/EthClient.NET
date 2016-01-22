@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Eth.RpcTypes
+namespace Eth
 {
     public class EthTransaction
     {

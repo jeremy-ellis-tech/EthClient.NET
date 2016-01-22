@@ -1,4 +1,4 @@
-﻿namespace Eth
+﻿namespace Eth.Utilities
 {
     /// <summary>
     /// Specifications of the Ethereum protocol

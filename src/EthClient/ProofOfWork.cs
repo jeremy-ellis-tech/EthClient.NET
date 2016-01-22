@@ -1,6 +1,6 @@
 ﻿using Eth.Utilities;
 
-namespace Eth.RpcTypes
+namespace Eth
 {
     public class ProofOfWork
     {

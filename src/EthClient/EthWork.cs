@@ -1,4 +1,4 @@
-﻿namespace Eth.RpcTypes
+﻿namespace Eth
 {
     public class EthWork
     {

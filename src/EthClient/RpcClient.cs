@@ -1,7 +1,5 @@
 ﻿using Eth.Json;
-using Eth.RpcTypes;
 using Eth.Utilities;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
