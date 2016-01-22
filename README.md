@@ -1,28 +1,33 @@
 # EthClient.NET v0.1a
-The super simple Ethereum Json RPC client.
+The super simple Ethereum JSON RPC client. Use native .NET types with Ethereum.
 
-Use native .NET types with Ethereum. No nasty byte hacking needed.
+_Currently a work in progress._ Not all of the RPC methods have been implemented yet.
 
-_Currently a work in progress._
-
-##Examples
-These examples assume the node is on the same PC as the one running the program. If not, replace `var client = new RpcClient()` with `var client = new RpcClient(new Uri("http://ip.address.here:port"))`
-###Getting the client version
-    using(var client = new RpcClient())
+## Examples
+### Getting the client version
+    using(var client = new RpcClient("node.address.here.with:port"))
     {
-		string version = await client.Web3ClientVersion();
+		string version = await client.Web3ClientVersionAsync();
         Console.WriteLine(version);
     }
 
 #### Outputs
 `Mist/v0.9.3/darwin/go1.4.1`
 
-###Getting the peer count
-    using(var client = new RpcClient())
+### Get RPC errors as native exceptions
+Calling EthGetWork() before starting the miner:
+
+    try
     {
-		var peerCount = await client.NetPeerCount();
-        Console.WriteLine(peerCount);
+        using (var rpcClient = new RpcClient("node.address.here.with:port"))
+        {
+            EthWork ret = await rpcClient.EthGetWorkAsync();
+        }
+    }
+    catch (EthException ex)
+    {
+        Console.WriteLine("ErrorCode: {0}, Message: {1}", ex.ErrorCode, ex.Message);
     }
 
 #### Outputs
-`3`
+`ErrorCode: -32000, Message: mining work not ready`

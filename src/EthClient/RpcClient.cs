@@ -1,4 +1,5 @@
-﻿using Eth.RpcTypes;
+﻿using Eth.Json;
+using Eth.RpcTypes;
 using Eth.Utilities;
 using Newtonsoft.Json;
 using System;
@@ -14,40 +15,50 @@ namespace Eth
     public class RpcClient : IDisposable
     {
         private static HttpClient DefaultHttpClient = new HttpClient();
-        private static Uri DefaultUri = new Uri("http://127.0.0.1:8545");
+        private static string DefaultUri = "http://127.0.0.1:8545";
+        private static IJsonSerializer DefaultJsonSerializer = new Json.JsonSerializer();
+
         private static string DefaultJsonRpc = "2.0";
         private static int DefaultRequestId = 0;
-        private static int EthAddressLength = 20; //bytes
-        private static int BlockHashLength = 32; //bytes
-        private static int IdentityLength = 60; //bytes
-        private static int HashRateLength = 32; //bytes
-        private static int ClientIDLength = 32; //bytes
 
         protected readonly Uri _nodeAddress;
         protected readonly HttpClient _httpClient;
-        protected readonly JsonSerializerSettings _serializerSettings;
+        protected readonly IJsonSerializer _jsonSerializer;
 
-        public RpcClient() : this(DefaultUri, DefaultHttpClient) { }
+        /// <summary>
+        /// The super simple Ethereum JSON RPC client
+        /// Connects to the default node address: 127.0.0.1:8545
+        /// </summary>
+        public RpcClient() : this(DefaultUri, DefaultHttpClient, DefaultJsonSerializer) { }
 
-        public RpcClient(Uri nodeAddress) : this(nodeAddress, DefaultHttpClient) { }
+        /// <summary>
+        /// The super simple Ethereum JSON RPC client
+        /// </summary>
+        /// <param name="nodeAddress">Address and port number of the node. eg. "127.0.0.1:8545"</param>
+        public RpcClient(string nodeAddress) : this(nodeAddress, DefaultHttpClient, DefaultJsonSerializer) { }
 
-        public RpcClient(Uri nodeAddress, HttpClient httpClient)
+        /// <summary>
+        /// The super simple Ethereum JSON RPC client
+        /// </summary>
+        /// <param name="nodeAddress">Address and port number of the node. eg. "127.0.0.1:8545"</param>
+        /// <param name="httpClient">The HttpClient to make the connections with</param>
+        /// <param name="jsonSerializer">Serializer used to serialize/deserialize the json returned</param>
+        public RpcClient(string nodeAddress, HttpClient httpClient, IJsonSerializer jsonSerializer)
         {
-            _nodeAddress = nodeAddress;
-            _httpClient = httpClient;
+            EnsureStringNotNullOrEmpty(nodeAddress, "nodeAddress");
+            EnsureObjectIsNotNull(httpClient, "httpClient");
+            EnsureObjectIsNotNull(jsonSerializer, "jsonSerialzer");
 
-            _serializerSettings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,
-                NullValueHandling = NullValueHandling.Ignore
-            };
+            _nodeAddress = new UriBuilder(nodeAddress).Uri;
+            _httpClient = httpClient;
+            _jsonSerializer = jsonSerializer;
         }
 
         /// <summary>
         /// Returns the current client version.
         /// </summary>
         /// <returns>The current client version</returns>
-        public async Task<string> Web3ClientVersion()
+        public async Task<string> Web3ClientVersionAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -67,7 +78,7 @@ namespace Eth
         /// </summary>
         /// <param name="data">The data to hash</param>
         /// <returns>The hash of the given data</returns>
-        public async Task<byte[]> Web3Sha3(byte[] data)
+        public async Task<byte[]> Web3Sha3Async(byte[] data)
         {
             RpcRequest request = new RpcRequest
             {
@@ -86,7 +97,7 @@ namespace Eth
         /// Returns the current network protocol version
         /// </summary>
         /// <returns>The current network protocol version</returns>
-        public async Task<string> NetVersion()
+        public async Task<string> NetVersionAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -105,7 +116,7 @@ namespace Eth
         /// Returns true if client is actively listening for network connections
         /// </summary>
         /// <returns>true when listening, otherwise false</returns>
-        public async Task<bool> NetListening()
+        public async Task<bool> NetListeningAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -124,7 +135,7 @@ namespace Eth
         /// Returns number of peers currenly connected to the client.
         /// </summary>
         /// <returns>The number of connected peers.</returns>
-        public async Task<BigInteger> NetPeerCount()
+        public async Task<BigInteger> NetPeerCountAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -143,7 +154,7 @@ namespace Eth
         /// Returns the current ethereum protocol version.
         /// </summary>
         /// <returns>The current ethereum protocol version</returns>
-        public async Task<string> EthProtocolVersion()
+        public async Task<string> EthProtocolVersionAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -162,7 +173,7 @@ namespace Eth
         /// Returns the client coinbase address.
         /// </summary>
         /// <returns>20 bytes - the current coinbase address.</returns>
-        public async Task<byte[]> EthCoinbase()
+        public async Task<byte[]> EthCoinbaseAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -182,7 +193,7 @@ namespace Eth
         /// </summary>
         /// <param name="transaction">The transaction to send</param>
         /// <returns>The transaction hash, or the zero hash if the transaction is not yet available</returns>
-        public async Task<byte[]> EthSendTransaction(EthTransaction transaction)
+        public async Task<byte[]> EthSendTransactionAsync(EthTransaction transaction)
         {
             RpcRequest request = new RpcRequest
             {
@@ -213,9 +224,9 @@ namespace Eth
         /// <param name="address">20 Bytes - address to check for balance.</param>
         /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
         /// <returns>Integer of the current balance in wei.</returns>
-        public async Task<BigInteger> EthGetBalance(byte[] address, DefaultBlock defaultBlock)
+        public async Task<BigInteger> EthGetBalanceAsync(byte[] address, DefaultBlock defaultBlock)
         {
-            if(address.Length > EthAddressLength)
+            if(address.Length > EthSpecs.AddressLength)
             {
                 throw new ArgumentOutOfRangeException("address");
             }
@@ -241,7 +252,7 @@ namespace Eth
         /// Returns the number of most recent block.
         /// </summary>
         /// <returns>integer of the current block number the client is on.</returns>
-        public async Task<BigInteger> EthBlockNumber()
+        public async Task<BigInteger> EthBlockNumberAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -262,9 +273,9 @@ namespace Eth
         /// <param name="address"> 20 Bytes - address.</param>
         /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
         /// <returns></returns>
-        public async Task<BigInteger> EthGetTransactionCount(byte[] address, DefaultBlock defaultBlock)
+        public async Task<BigInteger> EthGetTransactionCountAsync(byte[] address, DefaultBlock defaultBlock)
         {
-            if (address.Length > EthAddressLength)
+            if (address.Length > EthSpecs.AddressLength)
             {
                 throw new ArgumentOutOfRangeException("address");
             }
@@ -291,9 +302,9 @@ namespace Eth
         /// </summary>
         /// <param name="blockHash">32 Bytes - hash of a block</param>
         /// <returns>integer of the number of transactions in this block.</returns>
-        public async Task<BigInteger> EthGetTransactionCountByHash(byte[] blockHash)
+        public async Task<BigInteger> EthGetTransactionCountByHashAsync(byte[] blockHash)
         {
-            if(blockHash.Length != BlockHashLength)
+            if(blockHash.Length != EthSpecs.BlockHashLength)
             {
                 throw new ArgumentOutOfRangeException("blockHash");
             }
@@ -316,7 +327,7 @@ namespace Eth
         /// </summary>
         /// <param name="defaultBlock">integer of a block number, or the string "earliest", "latest" or "pending"</param>
         /// <returns>integer of the number of transactions in this block.</returns>
-        public async Task<BigInteger> EthGetBlockTransactionCountByNumber(DefaultBlock defaultBlock)
+        public async Task<BigInteger> EthGetBlockTransactionCountByNumberAsync(DefaultBlock defaultBlock)
         {
             RpcRequest request = new RpcRequest
             {
@@ -336,12 +347,9 @@ namespace Eth
         /// </summary>
         /// <param name="blockHash">32 Bytes - hash of a block</param>
         /// <returns>integer of the number of uncles in this block.</returns>
-        public async Task<BigInteger> EthGetUncleCountByBlockHash(byte[] blockHash)
+        public async Task<BigInteger> EthGetUncleCountByBlockHashAsync(byte[] blockHash)
         {
-            if(blockHash.Length != BlockHashLength)
-            {
-                throw new ArgumentOutOfRangeException("blockHash");
-            }
+            Ensure.EnsureCountIsCorrect(blockHash, EthSpecs.BlockHashLength, "blockHash");
 
             RpcRequest request = new RpcRequest
             {
@@ -361,7 +369,7 @@ namespace Eth
         /// </summary>
         /// <param name="defaultBlock">integer of a block number, or the string "latest", "earliest" or "pending"</param>
         /// <returns>integer of the number of uncles in this block.</returns>
-        public async Task<BigInteger> EthGetUncleCountByBlockNumber(DefaultBlock defaultBlock)
+        public async Task<BigInteger> EthGetUncleCountByBlockNumberAsync(DefaultBlock defaultBlock)
         {
             RpcRequest request = new RpcRequest
             {
@@ -382,12 +390,9 @@ namespace Eth
         /// <param name="address">20 Bytes - address</param>
         /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
         /// <returns>The code from the given address.</returns>
-        public async Task<byte[]> EthGetCode(byte[] address, DefaultBlock defaultBlock)
+        public async Task<byte[]> EthGetCodeAsync(byte[] address, DefaultBlock defaultBlock)
         {
-            if(address.Length != EthAddressLength)
-            {
-                throw new ArgumentOutOfRangeException("address");
-            }
+            Ensure.EnsureCountIsCorrect(address, EthSpecs.AddressLength, "address");
 
             RpcRequest request = new RpcRequest
             {
@@ -412,12 +417,9 @@ namespace Eth
         /// <param name="address">20 Bytes - address</param>
         /// <param name="data">Data to sign</param>
         /// <returns>Signed data</returns>
-        public async Task<byte[]> EthSign(byte[] address, byte[] data)
+        public async Task<byte[]> EthSignAsync(byte[] address, byte[] data)
         {
-            if(address.Length != EthAddressLength)
-            {
-                throw new ArgumentOutOfRangeException("address");
-            }
+            Ensure.EnsureCountIsCorrect(address, EthSpecs.AddressLength, "address");
 
             RpcRequest request = new RpcRequest
             {
@@ -438,7 +440,7 @@ namespace Eth
         /// <param name="call">The transaction call object</param>
         /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
         /// <returns>the return value of executed contract</returns>
-        public async Task<byte[]> EthCall(EthCall call, DefaultBlock defaultBlock)
+        public async Task<byte[]> EthCallAsync(EthCall call, DefaultBlock defaultBlock)
         {
             RpcRequest request = new RpcRequest
             {
@@ -472,7 +474,7 @@ namespace Eth
         /// <param name="call">The transaction call object</param>
         /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
         /// <returns>the amount of gas used.</returns>
-        public async Task<BigInteger> EthEstimateGas(EthCall call, DefaultBlock defaultBlock)
+        public async Task<BigInteger> EthEstimateGasAsync(EthCall call, DefaultBlock defaultBlock)
         {
             RpcRequest request = new RpcRequest
             {
@@ -506,12 +508,9 @@ namespace Eth
         /// <param name="blockHash">32 Bytes - Hash of a block.</param>
         /// <param name="fullTransaction">If true it returns the full transaction objects, if false only the hashes of the transactions</param>
         /// <returns>A block object, or null when no block was found</returns>
-        public async Task<EthBlock> EthGetBlockByHash(byte[] blockHash, bool fullTransaction)
+        public async Task<EthBlock> EthGetBlockByHashAsync(byte[] blockHash, bool fullTransaction)
         {
-            if (blockHash.Length != BlockHashLength)
-            {
-                throw new ArgumentOutOfRangeException("blockHash");
-            }
+            Ensure.EnsureCountIsCorrect(blockHash, EthSpecs.BlockHashLength, "blockHash");
 
             RpcRequest request = new RpcRequest
             {
@@ -530,7 +529,7 @@ namespace Eth
         /// Returns a list of available compilers in the client.
         /// </summary>
         /// <returns>Available compilers</returns>
-        public async Task<IEnumerable<string>> EthGetCompilers()
+        public async Task<IEnumerable<string>> EthGetCompilersAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -550,7 +549,7 @@ namespace Eth
         /// </summary>
         /// <param name="sourceCode">The source code.</param>
         /// <returns>The compiled source code</returns>
-        public async Task<dynamic> EthCompileSolidity(string sourceCode)
+        public async Task<dynamic> EthCompileSolidityAsync(string sourceCode)
         {
             EnsureStringNotNullOrEmpty(sourceCode, "sourceCode");
 
@@ -572,7 +571,7 @@ namespace Eth
         /// </summary>
         /// <param name="sourceCode">The source code</param>
         /// <returns>The compiled source code</returns>
-        public async Task<byte[]> EthCompileLll(string sourceCode)
+        public async Task<byte[]> EthCompileLllAsync(string sourceCode)
         {
             EnsureStringNotNullOrEmpty(sourceCode, "sourceCode");
 
@@ -594,7 +593,7 @@ namespace Eth
         /// </summary>
         /// <param name="sourceCode"></param>
         /// <returns></returns>
-        public async Task<byte[]> EthCompileSerpent(string sourceCode)
+        public async Task<byte[]> EthCompileSerpentAsync(string sourceCode)
         {
             EnsureStringNotNullOrEmpty(sourceCode, "sourceCode");
 
@@ -615,7 +614,7 @@ namespace Eth
         /// Returns the hash of the current block, the seedHash, and the boundary condition to be met 
         /// </summary>
         /// <returns>EthWork with current block hash, seed hash, and boundary condition</returns>
-        public async Task<EthWork> EthGetWork()
+        public async Task<EthWork> EthGetWorkAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -637,7 +636,7 @@ namespace Eth
         /// </summary>
         /// <param name="proofOfWork">The proof-of-work solution</param>
         /// <returns>returns true if the provided solution is valid, otherwise false</returns>
-        public async Task<bool> EthSubmitWork(ProofOfWork proofOfWork)
+        public async Task<bool> EthSubmitWorkAsync(ProofOfWork proofOfWork)
         {
             RpcRequest request = new RpcRequest
             {
@@ -658,14 +657,11 @@ namespace Eth
         /// <param name="hashRate">the hash rate</param>
         /// <param name="clientID">A random ID identifying the client</param>
         /// <returns>returns true if submitting went through succesfully and false otherwise</returns>
-        public async Task<bool> EthSubmitHashRate(BigInteger hashRate, byte[] clientID)
+        public async Task<bool> EthSubmitHashRateAsync(BigInteger hashRate, byte[] clientID)
         {
-            if(clientID.Length != ClientIDLength)
-            {
-                throw new ArgumentOutOfRangeException("clientID");
-            }
+            Ensure.EnsureCountIsCorrect(clientID, EthSpecs.ClientIDLength, "clientID");
 
-            if(hashRate.ToByteArray().Length > HashRateLength)
+            if(hashRate.ToByteArray().Length > EthSpecs.HashRateMaxLength)
             {
                 throw new ArgumentOutOfRangeException("hashRate");
             }
@@ -687,7 +683,7 @@ namespace Eth
         /// Creates new whisper identity in the client.
         /// </summary>
         /// <returns>60 Bytes - the address of the new identiy.</returns>
-        public async Task<byte[]> ShhNewIdentity()
+        public async Task<byte[]> ShhNewIdentityAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -707,12 +703,9 @@ namespace Eth
         /// </summary>
         /// <param name="address">60 Bytes - The identity address to check.</param>
         /// <returns>returns true if the client holds the privatekey for that identity, otherwise false.</returns>
-        public async Task<bool> ShhHasIdentity(byte[] address)
+        public async Task<bool> ShhHasIdentityAsync(byte[] address)
         {
-            if(address.Length != IdentityLength)
-            {
-                throw new ArgumentOutOfRangeException("address");
-            }
+            Ensure.EnsureCountIsCorrect(address, EthSpecs.WhisperIdentityLength, "address");
 
             RpcRequest request = new RpcRequest
             {
@@ -729,14 +722,19 @@ namespace Eth
 
         private static void EnsureStringNotNullOrEmpty(string value, string paramName)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException("paramName");
-            }
+            EnsureObjectIsNotNull(value, paramName);
 
             if (Equals(value, String.Empty))
             {
                 throw new ArgumentOutOfRangeException("paramName");
+            }
+        }
+
+        private static void EnsureObjectIsNotNull(object value, string paramName)
+        {
+            if(value == null)
+            {
+                throw new ArgumentNullException(paramName);
             }
         }
 
@@ -748,9 +746,12 @@ namespace Eth
         /// <returns>The raw RPC response</returns>
         public virtual async Task<RpcResponse<T>> PostRequestAsync<T>(RpcRequest request)
         {
-            ThrowIfDisposed();
+            if (_disposed)
+            {
+                throw new ObjectDisposedException("RpcClient");
+            }
 
-            string jsonRequest = JsonConvert.SerializeObject(request, _serializerSettings);
+            string jsonRequest = _jsonSerializer.Serialize(request);
 
             Debug.WriteLine(String.Format("Serialized Request: {0}", jsonRequest));
 
@@ -760,24 +761,16 @@ namespace Eth
 
             Debug.WriteLine(String.Format("Serialized Response: {0}", jsonResponse));
 
-            RpcError rpcError = JsonConvert.DeserializeObject<RpcError>(jsonResponse, _serializerSettings);
+            RpcError rpcError = _jsonSerializer.Deserialize<RpcError>(jsonResponse);
 
             if(rpcError.Error != null)
             {
                 throw new EthException(rpcError.Error.ErrorCode, rpcError.Error.Message);
             }
 
-            RpcResponse<T> rpcResponse = JsonConvert.DeserializeObject<RpcResponse<T>>(jsonResponse, _serializerSettings);
+            RpcResponse<T> rpcResponse = _jsonSerializer.Deserialize<RpcResponse<T>>(jsonResponse);
 
             return rpcResponse;
-        }
-
-        private void ThrowIfDisposed()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("RpcClient");
-            }
         }
 
         private bool _disposed = false;

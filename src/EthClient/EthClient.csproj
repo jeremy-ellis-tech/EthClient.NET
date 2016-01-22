@@ -45,19 +45,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EthSpecs.cs" />
     <Compile Include="EthException.cs" />
+    <Compile Include="Json\IJsonSerializer.cs" />
+    <Compile Include="Json\JsonSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RpcClient.cs" />
     <Compile Include="RpcTypes\DefaultBlock.cs" />
-    <Compile Include="RpcTypes\EthBlock.cs" />
+    <Compile Include="Json\EthBlock.cs" />
     <Compile Include="RpcTypes\EthCall.cs" />
     <Compile Include="RpcTypes\EthWork.cs" />
     <Compile Include="RpcTypes\ProofOfWork.cs" />
-    <Compile Include="RpcTypes\RpcError.cs" />
-    <Compile Include="RpcTypes\RpcMessage.cs" />
-    <Compile Include="RpcTypes\RpcRequest.cs" />
-    <Compile Include="RpcTypes\RpcResponse.cs" />
+    <Compile Include="Json\RpcError.cs" />
+    <Compile Include="Json\RpcMessage.cs" />
+    <Compile Include="Json\RpcRequest.cs" />
+    <Compile Include="Json\RpcResponse.cs" />
     <Compile Include="RpcTypes\EthTransaction.cs" />
+    <Compile Include="Utilities\Ensure.cs" />
     <Compile Include="Utilities\Hex.cs" />
   </ItemGroup>
   <ItemGroup>

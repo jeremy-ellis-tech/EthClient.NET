@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Eth.RpcTypes
+namespace Eth.Json
 {
     public class RpcResponse<T> : RpcMessage
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Eth.RpcTypes
+namespace Eth.Json
 {
     public class RpcRequest : RpcMessage
     {
