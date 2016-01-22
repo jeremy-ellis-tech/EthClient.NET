@@ -4,18 +4,27 @@ The super simple Ethereum JSON RPC client. Use native .NET types with Ethereum.
 _Currently a work in progress._ Not all of the RPC methods have been implemented yet.
 
 ## Examples
-### Getting the client version
-    using(var client = new RpcClient("node.address.here.with:port"))
+### List all your balances
+    using (var client = new RpcClient())
     {
-		string version = await client.Web3ClientVersionAsync();
-        Console.WriteLine(version);
+        ICollection<byte[]> accounts = await client.EthAccountsAsync();
+
+        var defaultBlock = new DefaultBlock(DefaultBlockParameterOption.Latest);
+
+        foreach (var account in accounts)
+        {
+            var balance = await client.EthGetBalanceAsync(account, defaultBlock);
+            Console.WriteLine("Account: {0} - Balance: {1} wei", EthHex.ByteArrayToHexString(account), balance);
+        }
     }
 
 #### Outputs
-`Mist/v0.9.3/darwin/go1.4.1`
+    Account: 0x407d73d8a49eeb85d32cf465507dd71ddeadbeef - Balance: 6725234 wei
+    Account: 0x545d73d8a49eebdeadbeef65507dd71d506533c1 - Balance: 234234 wei
+    Account: 0xdeadbeefa49eeb85d54ad465507dd71d506286c1 - Balance: 56354345 wei
 
 ### Get RPC errors as native exceptions
-Calling EthGetWork() before starting the miner:
+Calling `EthGetWorkAsync()` before starting the miner
 
     try
     {

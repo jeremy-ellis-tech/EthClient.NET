@@ -5,7 +5,11 @@ using System.Text;
 
 namespace Eth.Utilities
 {
-    public static class Hex
+    /// <summary>
+    /// Utility class for converting between Ethereum & .NET
+    /// quantities and data.
+    /// </summary>
+    public static class EthHex
     {
         /// <summary>
         /// Turn a base-16 encoded string into a quantity

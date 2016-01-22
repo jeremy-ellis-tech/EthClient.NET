@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EthSyncing.cs" />
+    <Compile Include="Json\EthSyncing.cs" />
     <Compile Include="Utilities\EthSpecs.cs" />
     <Compile Include="EthException.cs" />
     <Compile Include="Json\IJsonSerializer.cs" />
@@ -62,7 +64,7 @@
     <Compile Include="Json\RpcResponse.cs" />
     <Compile Include="EthTransaction.cs" />
     <Compile Include="Utilities\Ensure.cs" />
-    <Compile Include="Utilities\Hex.cs" />
+    <Compile Include="Utilities\EthHex.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

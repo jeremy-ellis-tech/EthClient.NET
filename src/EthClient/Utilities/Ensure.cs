@@ -6,7 +6,7 @@ namespace Eth.Utilities
     /// <summary>
     /// Utility class for checking parameters fall within requirements.
     /// </summary>
-    public static class Ensure
+    internal static class Ensure
     {
         public static void EnsureParameterIsNotNull(object value, string paramName)
         {
