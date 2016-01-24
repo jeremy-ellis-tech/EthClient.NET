@@ -193,6 +193,63 @@ namespace Eth
         }
 
         /// <summary>
+        /// Returns true if the client is actively mining new blocks.
+        /// </summary>
+        /// <returns>Returns true if the client is mining, otherwise false</returns>
+        public async Task<bool> EthMiningAsync()
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_mining",
+                Parameters = RpcRequest.EmptyParameters
+            };
+
+            RpcResponse<bool> response = await PostRequestAsync<bool>(request);
+
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Returns the number of hashes per second that the node is mining with.
+        /// </summary>
+        /// <returns>number of hashes per second.</returns>
+        public async Task<BigInteger> EthHashRateAsync()
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_hashrate",
+                Parameters = RpcRequest.EmptyParameters
+            };
+
+            RpcResponse<string> response = await PostRequestAsync<string>(request);
+
+            return EthHex.HexStringToInt(response.Result);
+        }
+
+        /// <summary>
+        /// Returns the current price per gas in wei.
+        /// </summary>
+        /// <returns>Current gas price in wei.</returns>
+        public async Task<BigInteger> EthGasPriceAsync()
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_gasPrice",
+                Parameters = RpcRequest.EmptyParameters
+            };
+
+            RpcResponse<string> response = await PostRequestAsync<string>(request);
+
+            return EthHex.HexStringToInt(response.Result);
+        }
+
+        /// <summary>
         /// Creates new message call transaction or a contract creation, if the data field contains code.
         /// </summary>
         /// <param name="transaction">The transaction to send</param>
@@ -215,6 +272,27 @@ namespace Eth
                                         data = EthHex.ByteArrayToHexString(x.Data),
                                         nonce = x.Nonce != null ? EthHex.IntToHexString(x.Nonce.Value) : null
                                     })
+            };
+
+            RpcResponse<string> response = await PostRequestAsync<string>(request);
+
+            return EthHex.HexStringToByteArray(response.Result);
+        }
+
+        /// <summary>
+        /// Creates new message call transaction or a contract creation for signed transactions.
+        /// </summary>
+        /// <param name="data">The signed transaction data</param>
+        /// <returns>32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available.
+        /// Use eth_getTransactionReceipt to get the contract address, after the transaction was mined, when you created a contract.</returns>
+        public async Task<byte[]> EthSendRawTransactionAsync(byte[] data)
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_sendRawTransaction",
+                Parameters = new[] { EthHex.ByteArrayToHexString(data) }
             };
 
             RpcResponse<string> response = await PostRequestAsync<string>(request);
@@ -303,6 +381,39 @@ namespace Eth
             RpcResponse<string> response = await PostRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
+        }
+
+        /// <summary>
+        /// Returns the value from a storage position at a given address.
+        /// </summary>
+        /// <param name="address">20 Bytes - address of the storage.</param>
+        /// <param name="position">integer of the position in the storage.</param>
+        /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if address or defaultBlock is null</exception>
+        /// <returns></returns>
+        public async Task<byte[]> EthGetStorageAtAsync(byte[] address, BigInteger position, DefaultBlock defaultBlock)
+        {
+            Ensure.EnsureParameterIsNotNull(address, "address");
+            Ensure.EnsureParameterIsNotNull(defaultBlock, "defaultBlock");
+            Ensure.EnsureCountIsCorrect(address, EthSpecs.AddressLength, "address");
+
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_getStorageAt",
+                Parameters = new[]
+                {
+                    EthHex.ByteArrayToHexString(address),
+                    EthHex.IntToHexString(position),
+                    defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
+                }
+            };
+
+            RpcResponse<string> response = await PostRequestAsync<string>(request);
+
+            return EthHex.HexStringToByteArray(response.Result);
         }
 
         /// <summary>
@@ -583,6 +694,54 @@ namespace Eth
         }
 
         /// <summary>
+        /// Returns information about a block by block number.
+        /// </summary>
+        /// <param name="defaultBlock">integer of a block number, or the string "earliest", "latest" or "pending"</param>
+        /// <param name="fullTransaction">If true it returns the full transaction objects, if false only the hashes of the transactions</param>
+        /// <returns></returns>
+        public async Task<EthBlock> EthGetBlockByNumberAsync(DefaultBlock defaultBlock, bool fullTransaction)
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_getBlockByNumber",
+                Parameters = new object[]
+                {
+                    defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant(),
+                    fullTransaction
+                }
+            };
+
+            RpcResponse<EthBlock> response = await PostRequestAsync<EthBlock>(request);
+
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Returns the information about a transaction requested by transaction hash.
+        /// </summary>
+        /// <param name="transactionHash">32 Bytes - hash of a transaction</param>
+        /// <returns>A transaction object, or null when no transaction was found</returns>
+        public async Task<EthTransaction> EthGetTransactionByHashAsync(byte[] transactionHash)
+        {
+            Ensure.EnsureParameterIsNotNull(transactionHash, "transactionHash");
+            Ensure.EnsureCountIsCorrect(transactionHash, EthSpecs.TransactionHashLength, "transactionHash");
+
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_getTransactionByHash",
+                Parameters = new[] { EthHex.ByteArrayToHexString(transactionHash) }
+            };
+
+            RpcResponse<EthTransaction> response = await PostRequestAsync<EthTransaction>(request);
+
+            return response.Result;
+        }
+
+        /// <summary>
         /// Returns a list of available compilers in the client.
         /// </summary>
         /// <returns>Available compilers</returns>
@@ -789,6 +948,7 @@ namespace Eth
         /// <typeparam name="T">The json type of the expected response (eg. string, bool)</typeparam>
         /// <param name="request">The RpcRequest</param>
         /// <exception cref="Eth.EthException">Thrown if the RPC call returns an error</exception>
+        /// <exception cref="System.ObjectDisposedException">Thrown if this RpcClient has been disposed</exception>
         /// <returns>The raw RPC response</returns>
         public virtual async Task<RpcResponse<T>> PostRequestAsync<T>(RpcRequest request)
         {

@@ -54,5 +54,10 @@
         /// Length of boundary condition in bytes
         /// </summary>
         public static int BoundaryConditionLength { get { return 32; } }
+
+        /// <summary>
+        /// Length of transaction hash in bytes
+        /// </summary>
+        public static int TransactionHashLength { get { return 32; } }
     }
 }
