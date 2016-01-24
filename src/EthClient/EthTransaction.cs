@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Eth.Utilities;
 using System.Numerics;
 
 namespace Eth
@@ -17,24 +17,13 @@ namespace Eth
         /// <param name="nonce">(optional) Integer of a nonce. This allows to overwrite your own pending transactions that use the same nonce.</param>
         public EthTransaction(byte[] from, byte[] data, byte[] to = null, BigInteger? gas = null, BigInteger? gasPrice = null, BigInteger? value = null, BigInteger? nonce = null)
         {
-            if(from == null)
-            {
-                throw new ArgumentNullException("from");
-            }
+            Ensure.EnsureParameterIsNotNull(from, "from");
+            Ensure.EnsureParameterIsNotNull(data, "data");
+            Ensure.EnsureCountIsCorrect(from, EthSpecs.AddressLength, "from");
 
-            if(data == null)
+            if(to != null)
             {
-                throw new ArgumentNullException("data");
-            }
-
-            if(from.Length != 20)
-            {
-                throw new ArgumentOutOfRangeException("from");
-            }
-
-            if(to != null && to.Length != 20)
-            {
-                throw new ArgumentOutOfRangeException("to");
+                Ensure.EnsureCountIsCorrect(to, EthSpecs.AddressLength, "to");
             }
 
             From = from;

@@ -44,5 +44,15 @@
         /// Length of mix digest length in bytes
         /// </summary>
         public static int MixDigestLength { get { return 32; } }
+
+        /// <summary>
+        /// Length of seed hash in bytes
+        /// </summary>
+        public static int SeedHashLength { get { return 32; } }
+
+        /// <summary>
+        /// Length of boundary condition in bytes
+        /// </summary>
+        public static int BoundaryConditionLength { get { return 32; } }
     }
 }

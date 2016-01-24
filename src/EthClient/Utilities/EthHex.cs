@@ -35,6 +35,8 @@ namespace Eth.Utilities
         /// Decode a big endian hex string into an array of bytes.
         /// </summary>
         /// <param name="hex">Big endian hex string ie. 0x2a</param>
+        /// <exception cref="System.ArgumentNullException">Thrown if hex is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if hex is empty</exception>
         /// <returns>The byte array value</returns>
         public static byte[] HexStringToByteArray(string hex)
         {
@@ -62,6 +64,8 @@ namespace Eth.Utilities
         /// Turn a byte array into a base-16 string.
         /// </summary>
         /// <param name="arr">Array of byte values</param>
+        /// <exception cref="System.ArgumentNullException">Thrown if arr is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if arr is empty</exception>
         /// <returns>Hex encoded values as a string</returns>
         public static string ByteArrayToHexString(byte[] arr)
         {

@@ -30,7 +30,7 @@ namespace EthClient.Test
         }
 
         [TestMethod]
-        public void HexConverterShouldConvertIntCorrectly()
+        public void ShouldHandlePaddingForConvertingToInts()
         {
             string sTwo = "0x2";
             int iTwo = (int)EthHex.HexStringToInt(sTwo);
@@ -67,6 +67,22 @@ namespace EthClient.Test
 
             iZero = (int)EthHex.HexStringToInt("0x000000000000000000000");
             Assert.IsTrue(Equals(0, iZero));
+        }
+
+        [TestMethod]
+        public void TwoDifferentStringShouldNotHaveEqualValuesOrQuantities()
+        {
+            string hex0 = "0x123";
+            string hex1 = "0x321";
+
+            BigInteger quantity0 = EthHex.HexStringToInt(hex0);
+            BigInteger quantity1 = EthHex.HexStringToInt(hex1);
+
+            byte[] value0 = EthHex.HexStringToByteArray(hex0);
+            byte[] value1 = EthHex.HexStringToByteArray(hex1);
+
+            Assert.IsFalse(Equals(quantity0, quantity1));
+            Assert.IsFalse(Equals(value0, value1));
         }
     }
 }
