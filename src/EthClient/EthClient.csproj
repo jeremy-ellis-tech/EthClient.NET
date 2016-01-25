@@ -46,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EthBlock.cs" />
+    <Compile Include="EthFilterOptions.cs" />
     <Compile Include="EthSyncing.cs" />
     <Compile Include="EthTransactionReceipt.cs" />
+    <Compile Include="Json\EthFilterOptions.cs" />
     <Compile Include="Json\EthLog.cs" />
     <Compile Include="Json\EthSyncing.cs" />
     <Compile Include="Json\EthTransaction.cs" />

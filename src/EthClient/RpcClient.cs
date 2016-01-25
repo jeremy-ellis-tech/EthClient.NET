@@ -17,7 +17,7 @@ namespace Eth
     {
         private static HttpClient DefaultHttpClient = new HttpClient();
         private static string DefaultUri = "http://127.0.0.1:8545";
-        private static IJsonSerializer DefaultJsonSerializer = new Json.JsonSerializer();
+        private static IJsonSerializer DefaultJsonSerializer = new JsonSerializer();
 
         private static string DefaultJsonRpc = "2.0";
         private static int DefaultRequestId = 0;
@@ -69,7 +69,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return response.Result;
         }
@@ -92,7 +92,7 @@ namespace Eth
                 Parameters = new[] { data }.Select(x => EthHex.ToHexString(x))
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
         }
@@ -111,7 +111,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return response.Result;
         }
@@ -130,7 +130,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<bool> response = await PostRequestAsync<bool>(request);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
 
             return response.Result;
         }
@@ -149,7 +149,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -168,7 +168,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return response.Result;
         }
@@ -187,7 +187,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
         }
@@ -206,7 +206,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<bool> response = await PostRequestAsync<bool>(request);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
 
             return response.Result;
         }
@@ -225,7 +225,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -244,7 +244,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -274,7 +274,7 @@ namespace Eth
                                     })
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
         }
@@ -295,7 +295,7 @@ namespace Eth
                 Parameters = new[] { EthHex.ToHexString(data) }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
         }
@@ -315,7 +315,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<dynamic> response = await PostRequestAsync<dynamic>(request);
+            RpcResponse<dynamic> response = await PostRpcRequestAsync<dynamic>(request);
 
             if (response.Result is bool)
             {
@@ -350,7 +350,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<IEnumerable<string>> response = await PostRequestAsync<IEnumerable<string>>(request);
+            RpcResponse<IEnumerable<string>> response = await PostRpcRequestAsync<IEnumerable<string>>(request);
 
             return response.Result.Select(x => EthHex.HexStringToByteArray(x)).ToArray();
         }
@@ -378,7 +378,7 @@ namespace Eth
                 }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -411,7 +411,7 @@ namespace Eth
                 }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
         }
@@ -430,7 +430,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -458,7 +458,7 @@ namespace Eth
                 }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -481,7 +481,7 @@ namespace Eth
                 Parameters = new[] { EthHex.ToHexString(blockHash) }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -501,7 +501,7 @@ namespace Eth
                 Parameters = new[] { defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.Value.ToString().ToLowerInvariant() }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -524,7 +524,7 @@ namespace Eth
                 Parameters = new[] { EthHex.ToHexString(blockHash) }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -544,7 +544,7 @@ namespace Eth
                 Parameters = new[] { defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.Value.ToString().ToLowerInvariant() }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -572,7 +572,7 @@ namespace Eth
                 }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
         }
@@ -596,7 +596,7 @@ namespace Eth
                 Parameters = new[] { EthHex.ToHexString(address), EthHex.ToHexString(data) }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
         }
@@ -630,7 +630,7 @@ namespace Eth
                 }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
         }
@@ -664,7 +664,7 @@ namespace Eth
                 }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToInt(response.Result);
         }
@@ -688,7 +688,7 @@ namespace Eth
                 Parameters = new object[] { EthHex.ToHexString(blockHash), fullTransaction }
             };
 
-            RpcResponse<Json.EthBlock> response = await PostRequestAsync<Json.EthBlock>(request);
+            RpcResponse<Json.EthBlock> response = await PostRpcRequestAsync<Json.EthBlock>(request);
 
             return GetEthBlock(response.Result);
         }
@@ -713,7 +713,7 @@ namespace Eth
                 }
             };
 
-            RpcResponse<Json.EthBlock> response = await PostRequestAsync<Json.EthBlock>(request);
+            RpcResponse<Json.EthBlock> response = await PostRpcRequestAsync<Json.EthBlock>(request);
 
             return GetEthBlock(response.Result);
         }
@@ -762,7 +762,7 @@ namespace Eth
                 Parameters = new[] { EthHex.ToHexString(transactionHash) }
             };
 
-            RpcResponse<Json.EthTransaction> response = await PostRequestAsync<Json.EthTransaction>(request);
+            RpcResponse<Json.EthTransaction> response = await PostRpcRequestAsync<Json.EthTransaction>(request);
 
             return GetEthTransaction(response.Result);
         }
@@ -787,7 +787,7 @@ namespace Eth
                 }
             };
 
-            RpcResponse<Json.EthTransaction> response = await PostRequestAsync<Json.EthTransaction>(request);
+            RpcResponse<Json.EthTransaction> response = await PostRpcRequestAsync<Json.EthTransaction>(request);
 
             return GetEthTransaction(response.Result);
         }
@@ -821,29 +821,9 @@ namespace Eth
                 Parameters = new[] { EthHex.ToHexString(transactionHash) }
             };
 
-            RpcResponse<Json.EthTransactionReceipt> response = await PostRequestAsync<Json.EthTransactionReceipt>(request);
+            RpcResponse<Json.EthTransactionReceipt> response = await PostRpcRequestAsync<Json.EthTransactionReceipt>(request);
 
             return new EthTransactionReceipt(); //TODO
-        }
-
-        public async Task<IEnumerable<EthLog>> EthGetFilterChangesAsync(BigInteger filterId)
-        {
-            RpcRequest request = new RpcRequest
-            {
-                ID = DefaultRequestId,
-                JsonRpc = DefaultJsonRpc,
-                MethodName = "eth_getFilterChanges",
-                Parameters = new[] { EthHex.ToHexString(filterId) }
-            };
-
-            RpcResponse<IEnumerable<Json.EthLog>> response = await PostRequestAsync<IEnumerable<Json.EthLog>>(request);
-
-            return GetEthLog(response.Result);
-        }
-
-        private IEnumerable<EthLog> GetEthLog(IEnumerable<EthLog> result)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -860,7 +840,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<IEnumerable<string>> response = await PostRequestAsync<IEnumerable<string>>(request);
+            RpcResponse<IEnumerable<string>> response = await PostRpcRequestAsync<IEnumerable<string>>(request);
 
             return response.Result;
         }
@@ -883,7 +863,7 @@ namespace Eth
                 Parameters = new[] { sourceCode }
             };
 
-            RpcResponse<IDictionary<string, SolidityContract>> response = await PostRequestAsync<IDictionary<string, SolidityContract>>(request);
+            RpcResponse<IDictionary<string, SolidityContract>> response = await PostRpcRequestAsync<IDictionary<string, SolidityContract>>(request);
 
             return response.Result.Select(x => { x.Value.ContractName = x.Key; return x.Value; }).ToArray();
         }
@@ -906,7 +886,7 @@ namespace Eth
                 Parameters = new[] { sourceCode }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
         }
@@ -929,9 +909,120 @@ namespace Eth
                 Parameters = new[] { sourceCode }
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
+        }
+
+        /// <summary>
+        /// Creates a filter object, based on filter options, to notify when the state changes (logs).
+        /// To check if the state has changed, call EthGetFilterChangesAsync()
+        /// </summary>
+        /// <param name="filterOptions">The filter options</param>
+        /// <returns>A filter id</returns>
+        public async Task<BigInteger> EthNewFilterAsync(EthFilterOptions filterOptions)
+        {
+            Ensure.EnsureParameterIsNotNull(filterOptions, "filterOptions");
+
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_newFilter",
+                Parameters = new[]
+                {
+                    new
+                    {
+                        fromBlock = filterOptions.FromBlock != null ? filterOptions.FromBlock.BlockNumber.HasValue ? EthHex.ToHexString(filterOptions.FromBlock.BlockNumber.Value) : filterOptions.FromBlock.Option.ToString().ToLowerInvariant() : null,
+                        toBlock = filterOptions.ToBlock != null ? filterOptions.ToBlock.BlockNumber.HasValue ? EthHex.ToHexString(filterOptions.ToBlock.BlockNumber.Value) : filterOptions.ToBlock.Option.ToString().ToLowerInvariant() : null,
+                        address = filterOptions.Address,
+                        topics = filterOptions.Topics != null ? filterOptions.Topics : null
+                    }
+                }
+            };
+
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
+
+            return EthHex.HexStringToInt(response.Result);
+        }
+
+        /// <summary>
+        /// Creates a filter in the node, to notify when a new block arrives. To check if the state has changed, call EthGetFilterChangesAsync().
+        /// </summary>
+        /// <returns>A filter id</returns>
+        public async Task<BigInteger> EthNewBlockFilterAsync()
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_newBlockFilter",
+                Parameters = RpcRequest.EmptyParameters
+            };
+
+            RpcResponse<string> rpcResponse = await PostRpcRequestAsync<string>(request);
+
+            return EthHex.HexStringToInt(rpcResponse.Result);
+        }
+
+        /// <summary>
+        /// Creates a filter in the node, to notify when new pending transactions arrive. To check if the state has changed, call EthGetFilterChangesAsync().
+        /// </summary>
+        /// <returns>A filter id</returns>
+        public async Task<BigInteger> EthNewPendingTransactionFilterAsync()
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_newPendingTransactionFilter",
+                Parameters = RpcRequest.EmptyParameters
+            };
+
+            RpcResponse<string> rpcResponse = await PostRpcRequestAsync<string>(request);
+
+            return EthHex.HexStringToInt(rpcResponse.Result);
+        }
+
+        /// <summary>
+        /// Uninstalls a filter with given id. Should always be called when watch is no longer needed.
+        /// Additonally Filters timeout when they aren't requested with eth_getFilterChanges for a period of time.
+        /// </summary>
+        /// <param name="filterId">The filter id</param>
+        /// <returns>true if the filter was successfully uninstalled, otherwise false</returns>
+        public async Task<bool> EthUninstallFilterAsync(BigInteger filterId)
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_uninstallFilter",
+                Parameters = new[] { EthHex.ToHexString(filterId) }
+            };
+
+            RpcResponse<bool> rpcResponse = await PostRpcRequestAsync<bool>(request);
+
+            return rpcResponse.Result;
+        }
+
+        /// <summary>
+        /// Polling method for a filter, which returns an array of logs which occurred since last poll.
+        /// </summary>
+        /// <param name="filterId"> the filter id.</param>
+        /// <returns>Array of log objects, or an empty array if nothing has changed since last poll.</returns>
+        public async Task<dynamic> EthGetFilterChangesAsync(BigInteger filterId)
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_getFilterChanges",
+                Parameters = new[] { EthHex.ToHexString(filterId) }
+            };
+
+            RpcResponse<dynamic> rpcResponse = await PostRpcRequestAsync<dynamic>(request);
+
+            return rpcResponse.Result;
         }
 
         /// <summary>
@@ -948,7 +1039,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<IList<string>> rpcResponse = await PostRequestAsync<IList<string>>(request);
+            RpcResponse<IList<string>> rpcResponse = await PostRpcRequestAsync<IList<string>>(request);
 
             IList<string> result = rpcResponse.Result;
 
@@ -970,7 +1061,7 @@ namespace Eth
                 Parameters = new[] { proofOfWork.Nonce, proofOfWork.HeaderPowHash, proofOfWork.MixDigest }
             };
 
-            RpcResponse<bool> response = await PostRequestAsync<bool>(request);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
 
             return response.Result;
         }
@@ -1000,7 +1091,7 @@ namespace Eth
                 Parameters = new[] { EthHex.ToHexString(hashRate), EthHex.ToHexString(clientID) }
             };
 
-            RpcResponse<bool> response = await PostRequestAsync<bool>(request);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
 
             return response.Result;
         }
@@ -1019,7 +1110,7 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<string> response = await PostRequestAsync<string>(request);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
 
             return EthHex.HexStringToByteArray(response.Result);
         }
@@ -1042,7 +1133,7 @@ namespace Eth
                 Parameters = new[] { EthHex.ToHexString(address) }
             };
 
-            RpcResponse<bool> response = await PostRequestAsync<bool>(request);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
 
             return response.Result;
         }
@@ -1055,7 +1146,7 @@ namespace Eth
         /// <exception cref="Eth.EthException">Thrown if the RPC call returns an error</exception>
         /// <exception cref="System.ObjectDisposedException">Thrown if this RpcClient has been disposed</exception>
         /// <returns>The raw RPC response</returns>
-        public virtual async Task<RpcResponse<T>> PostRequestAsync<T>(RpcRequest request)
+        public virtual async Task<RpcResponse<T>> PostRpcRequestAsync<T>(RpcRequest request)
         {
             if (_disposed)
             {
