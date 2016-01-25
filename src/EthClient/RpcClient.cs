@@ -89,7 +89,7 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "web3_sha3",
-                Parameters = new[] { data }.Select(x => EthHex.ByteArrayToHexString(x))
+                Parameters = new[] { data }.Select(x => EthHex.ToHexString(x))
             };
 
             RpcResponse<string> response = await PostRequestAsync<string>(request);
@@ -264,13 +264,13 @@ namespace Eth
                 Parameters = new[] { transaction }
                                     .Select(x => new
                                     {
-                                        from = EthHex.ByteArrayToHexString(x.From),
-                                        to = EthHex.ByteArrayToHexString(x.To),
-                                        gas = x.Gas != null ? EthHex.IntToHexString(x.Gas.Value) : null,
-                                        gasPrice = x.GasPrice != null ? EthHex.IntToHexString(x.GasPrice.Value) : null,
-                                        value = x.Value != null ? EthHex.IntToHexString(x.Value.Value) : null,
-                                        data = EthHex.ByteArrayToHexString(x.Data),
-                                        nonce = x.Nonce != null ? EthHex.IntToHexString(x.Nonce.Value) : null
+                                        from = EthHex.ToHexString(x.From),
+                                        to = EthHex.ToHexString(x.To),
+                                        gas = x.Gas != null ? EthHex.ToHexString(x.Gas.Value) : null,
+                                        gasPrice = x.GasPrice != null ? EthHex.ToHexString(x.GasPrice.Value) : null,
+                                        value = x.Value != null ? EthHex.ToHexString(x.Value.Value) : null,
+                                        data = EthHex.ToHexString(x.Data),
+                                        nonce = x.Nonce != null ? EthHex.ToHexString(x.Nonce.Value) : null
                                     })
             };
 
@@ -292,7 +292,7 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "eth_sendRawTransaction",
-                Parameters = new[] { EthHex.ByteArrayToHexString(data) }
+                Parameters = new[] { EthHex.ToHexString(data) }
             };
 
             RpcResponse<string> response = await PostRequestAsync<string>(request);
@@ -373,8 +373,8 @@ namespace Eth
                 MethodName = "eth_getBalance",
                 Parameters = new[]
                 {
-                    EthHex.ByteArrayToHexString(address),
-                    defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
+                    EthHex.ToHexString(address),
+                    defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
                 }
             };
 
@@ -405,9 +405,9 @@ namespace Eth
                 MethodName = "eth_getStorageAt",
                 Parameters = new[]
                 {
-                    EthHex.ByteArrayToHexString(address),
-                    EthHex.IntToHexString(position),
-                    defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
+                    EthHex.ToHexString(address),
+                    EthHex.ToHexString(position),
+                    defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
                 }
             };
 
@@ -453,8 +453,8 @@ namespace Eth
                 MethodName = "eth_getTransactionCount",
                 Parameters = new[]
                 {
-                    EthHex.ByteArrayToHexString(address),
-                    defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
+                    EthHex.ToHexString(address),
+                    defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
                 }
             };
 
@@ -478,7 +478,7 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "eth_getBlockTransactionCountByHash",
-                Parameters = new[] { EthHex.ByteArrayToHexString(blockHash) }
+                Parameters = new[] { EthHex.ToHexString(blockHash) }
             };
 
             RpcResponse<string> response = await PostRequestAsync<string>(request);
@@ -498,7 +498,7 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "eth_getBlockTransactionCountByNumber",
-                Parameters = new[] { defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.Value.ToString().ToLowerInvariant() }
+                Parameters = new[] { defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.Value.ToString().ToLowerInvariant() }
             };
 
             RpcResponse<string> response = await PostRequestAsync<string>(request);
@@ -521,7 +521,7 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "eth_getUncleCountByBlockHash",
-                Parameters = new[] { EthHex.ByteArrayToHexString(blockHash) }
+                Parameters = new[] { EthHex.ToHexString(blockHash) }
             };
 
             RpcResponse<string> response = await PostRequestAsync<string>(request);
@@ -541,7 +541,7 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "eth_getUncleCountByBlockNumber",
-                Parameters = new[] { defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.Value.ToString().ToLowerInvariant() }
+                Parameters = new[] { defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.Value.ToString().ToLowerInvariant() }
             };
 
             RpcResponse<string> response = await PostRequestAsync<string>(request);
@@ -567,8 +567,8 @@ namespace Eth
                 MethodName = "eth_getCode",
                 Parameters = new[]
                 {
-                    EthHex.ByteArrayToHexString(address),
-                    defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.Value.ToString().ToLowerInvariant()
+                    EthHex.ToHexString(address),
+                    defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.Value.ToString().ToLowerInvariant()
                 }
             };
 
@@ -593,7 +593,7 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "eth_sign",
-                Parameters = new[] { EthHex.ByteArrayToHexString(address), EthHex.ByteArrayToHexString(data) }
+                Parameters = new[] { EthHex.ToHexString(address), EthHex.ToHexString(data) }
             };
 
             RpcResponse<string> response = await PostRequestAsync<string>(request);
@@ -626,7 +626,7 @@ namespace Eth
                         data = call.Data
                     },
 
-                    defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
+                    defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
                 }
             };
 
@@ -660,7 +660,7 @@ namespace Eth
                         data = call.Data
                     },
 
-                    defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
+                    defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
                 }
             };
 
@@ -685,12 +685,12 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "eth_getBlockByHash",
-                Parameters = new object[] { EthHex.ByteArrayToHexString(blockHash), fullTransaction }
+                Parameters = new object[] { EthHex.ToHexString(blockHash), fullTransaction }
             };
 
-            RpcResponse<EthBlock> response = await PostRequestAsync<EthBlock>(request);
+            RpcResponse<Json.EthBlock> response = await PostRequestAsync<Json.EthBlock>(request);
 
-            return response.Result;
+            return GetEthBlock(response.Result);
         }
 
         /// <summary>
@@ -708,14 +708,40 @@ namespace Eth
                 MethodName = "eth_getBlockByNumber",
                 Parameters = new object[]
                 {
-                    defaultBlock.BlockNumber.HasValue ? EthHex.IntToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant(),
+                    defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant(),
                     fullTransaction
                 }
             };
 
-            RpcResponse<EthBlock> response = await PostRequestAsync<EthBlock>(request);
+            RpcResponse<Json.EthBlock> response = await PostRequestAsync<Json.EthBlock>(request);
 
-            return response.Result;
+            return GetEthBlock(response.Result);
+        }
+
+        private static EthBlock GetEthBlock(Json.EthBlock ethBlock)
+        {
+            return new EthBlock
+            {
+                Number = String.IsNullOrEmpty(ethBlock.Number) ? (BigInteger?)null : EthHex.HexStringToInt(ethBlock.Number),
+                Hash = String.IsNullOrEmpty(ethBlock.Number) ? null : EthHex.HexStringToByteArray(ethBlock.Hash),
+                ParentHash = EthHex.HexStringToByteArray(ethBlock.ParentHash),
+                Nonce = String.IsNullOrEmpty(ethBlock.Nonce) ? null : EthHex.HexStringToByteArray(ethBlock.Nonce),
+                Sha3Uncles = EthHex.HexStringToByteArray(ethBlock.Sha3Uncles),
+                LogsBloom = String.IsNullOrEmpty(ethBlock.LogsBloom) ? null : EthHex.HexStringToByteArray(ethBlock.LogsBloom),
+                TransactionRoot = EthHex.HexStringToByteArray(ethBlock.TransactionRoot),
+                StateRoot = EthHex.HexStringToByteArray(ethBlock.StateRoot),
+                ReceiptsRoot = EthHex.HexStringToByteArray(ethBlock.ReceiptsRoot),
+                Miner = EthHex.HexStringToByteArray(ethBlock.Miner),
+                Difficulty = EthHex.HexStringToInt(ethBlock.Difficulty),
+                TotalDifficulty = EthHex.HexStringToInt(ethBlock.TotalDifficulty),
+                ExtraData = EthHex.HexStringToByteArray(ethBlock.ExtraData),
+                Size = EthHex.HexStringToInt(ethBlock.Size),
+                GasLimit = EthHex.HexStringToInt(ethBlock.GasLimit),
+                GasUsed = EthHex.HexStringToInt(ethBlock.GasUsed),
+                TimeStamp = DateTimeOffset.Parse(ethBlock.TimeStamp),
+                Transactions = ethBlock.Transactions, //TODO
+                Unlces = ethBlock.Unlces.Select(x => EthHex.HexStringToByteArray(x))
+            };
         }
 
         /// <summary>
@@ -733,12 +759,91 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "eth_getTransactionByHash",
-                Parameters = new[] { EthHex.ByteArrayToHexString(transactionHash) }
+                Parameters = new[] { EthHex.ToHexString(transactionHash) }
             };
 
-            RpcResponse<EthTransaction> response = await PostRequestAsync<EthTransaction>(request);
+            RpcResponse<Json.EthTransaction> response = await PostRequestAsync<Json.EthTransaction>(request);
 
-            return response.Result;
+            return GetEthTransaction(response.Result);
+        }
+
+        /// <summary>
+        /// Returns information about a transaction by block number and transaction index position.
+        /// </summary>
+        /// <param name="defaultBlock">a block number, or the string "earliest", "latest" or "pending"</param>
+        /// <param name="position">the transaction index position.</param>
+        /// <returns>A transaction object, or null when no transaction was found</returns>
+        public async Task<EthTransaction> EthGetTransactionByBlockNumberAndIndexAsync(DefaultBlock defaultBlock, BigInteger position)
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_getTransactionByBlockNumberAndIndex",
+                Parameters = new object[]
+                {
+                    defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant(),
+                    position
+                }
+            };
+
+            RpcResponse<Json.EthTransaction> response = await PostRequestAsync<Json.EthTransaction>(request);
+
+            return GetEthTransaction(response.Result);
+        }
+
+        private static EthTransaction GetEthTransaction(Json.EthTransaction transaction)
+        {
+            if(transaction == null)
+            {
+                return null;
+            }
+
+            return new EthTransaction(null, null); //TODO
+        }
+
+        /// <summary>
+        /// Returns the receipt of a transaction by transaction hash.
+        /// Note That the receipt is not available for pending transactions.
+        /// </summary>
+        /// <param name="transactionHash">32 Bytes - hash of a transaction</param>
+        /// <returns>A transaction receipt object, or null when no receipt was found</returns>
+        public async Task<EthTransactionReceipt> EthGetTransactionReceiptAsync(byte[] transactionHash)
+        {
+            Ensure.EnsureParameterIsNotNull(transactionHash, "transactionHash");
+            Ensure.EnsureCountIsCorrect(transactionHash, EthSpecs.TransactionHashLength, "transactionHash");
+
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_getTransactionReceipt",
+                Parameters = new[] { EthHex.ToHexString(transactionHash) }
+            };
+
+            RpcResponse<Json.EthTransactionReceipt> response = await PostRequestAsync<Json.EthTransactionReceipt>(request);
+
+            return new EthTransactionReceipt(); //TODO
+        }
+
+        public async Task<IEnumerable<EthLog>> EthGetFilterChangesAsync(BigInteger filterId)
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_getFilterChanges",
+                Parameters = new[] { EthHex.ToHexString(filterId) }
+            };
+
+            RpcResponse<IEnumerable<Json.EthLog>> response = await PostRequestAsync<IEnumerable<Json.EthLog>>(request);
+
+            return GetEthLog(response.Result);
+        }
+
+        private IEnumerable<EthLog> GetEthLog(IEnumerable<EthLog> result)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -775,7 +880,7 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "eth_compileSolidity",
-                Parameters = new[]{ sourceCode }
+                Parameters = new[] { sourceCode }
             };
 
             RpcResponse<dynamic> response = await PostRequestAsync<dynamic>(request);
@@ -882,7 +987,7 @@ namespace Eth
         {
             Ensure.EnsureCountIsCorrect(clientID, EthSpecs.ClientIDLength, "clientID");
 
-            if(hashRate.ToByteArray().Length > EthSpecs.HashRateMaxLength)
+            if (hashRate.ToByteArray().Length > EthSpecs.HashRateMaxLength)
             {
                 throw new ArgumentOutOfRangeException("hashRate");
             }
@@ -892,7 +997,7 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "eth_submitHashrate",
-                Parameters = new[] { EthHex.IntToHexString(hashRate), EthHex.ByteArrayToHexString(clientID) }
+                Parameters = new[] { EthHex.ToHexString(hashRate), EthHex.ToHexString(clientID) }
             };
 
             RpcResponse<bool> response = await PostRequestAsync<bool>(request);
@@ -934,7 +1039,7 @@ namespace Eth
                 ID = DefaultRequestId,
                 JsonRpc = DefaultJsonRpc,
                 MethodName = "shh_hasIdentity",
-                Parameters = new[] { EthHex.ByteArrayToHexString(address) }
+                Parameters = new[] { EthHex.ToHexString(address) }
             };
 
             RpcResponse<bool> response = await PostRequestAsync<bool>(request);
@@ -970,7 +1075,7 @@ namespace Eth
 
             RpcError rpcError = _jsonSerializer.Deserialize<RpcError>(jsonResponse);
 
-            if(rpcError.Error != null)
+            if (rpcError.Error != null)
             {
                 throw new EthException(rpcError.Error.ErrorCode, rpcError.Error.Message);
             }

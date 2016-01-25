@@ -45,8 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EthBlock.cs" />
     <Compile Include="EthSyncing.cs" />
+    <Compile Include="EthTransactionReceipt.cs" />
+    <Compile Include="Json\EthLog.cs" />
     <Compile Include="Json\EthSyncing.cs" />
+    <Compile Include="Json\EthTransaction.cs" />
+    <Compile Include="Json\EthTransactionReceipt.cs" />
     <Compile Include="Utilities\EthSpecs.cs" />
     <Compile Include="EthException.cs" />
     <Compile Include="Json\IJsonSerializer.cs" />

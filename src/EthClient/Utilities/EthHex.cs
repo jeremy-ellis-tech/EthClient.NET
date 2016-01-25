@@ -22,16 +22,6 @@ namespace Eth.Utilities
         }
 
         /// <summary>
-        /// Turn a integer quantity into it's big endian hexadecimal string representation
-        /// </summary>
-        /// <param name="value">The integer quantity</param>
-        /// <returns>Base-16 value representing the quantity</returns>
-        public static string IntToHexString(BigInteger value)
-        {
-            return String.Format("0x{0}", value.ToString("X2"));
-        }
-
-        /// <summary>
         /// Decode a big endian hex string into an array of bytes.
         /// </summary>
         /// <param name="hex">Big endian hex string ie. 0x2a</param>
@@ -61,13 +51,23 @@ namespace Eth.Utilities
         }
 
         /// <summary>
+        /// Turn a integer quantity into it's big endian hexadecimal string representation
+        /// </summary>
+        /// <param name="value">The integer quantity</param>
+        /// <returns>Base-16 value representing the quantity</returns>
+        public static string ToHexString(BigInteger value)
+        {
+            return String.Format("0x{0}", value.ToString("X"));
+        }
+
+        /// <summary>
         /// Turn a byte array into a base-16 string.
         /// </summary>
         /// <param name="arr">Array of byte values</param>
         /// <exception cref="System.ArgumentNullException">Thrown if arr is null</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown if arr is empty</exception>
         /// <returns>Hex encoded values as a string</returns>
-        public static string ByteArrayToHexString(byte[] arr)
+        public static string ToHexString(byte[] arr)
         {
             Ensure.EnsureParameterIsNotNull(arr, "arr");
 

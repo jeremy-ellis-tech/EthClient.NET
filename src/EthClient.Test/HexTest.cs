@@ -10,9 +10,9 @@ namespace EthClient.Test
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void HexConverterShouldThrowOnNullParameter()
+        public void ShouldThrowOnNullParameter()
         {
-            EthHex.ByteArrayToHexString(null);
+            EthHex.ToHexString(null);
         }
 
         [TestMethod]
@@ -30,43 +30,40 @@ namespace EthClient.Test
         }
 
         [TestMethod]
-        public void ShouldHandlePaddingForConvertingToInts()
+        public void ShouldConvertQuantitiesCorrectly()
         {
-            string sTwo = "0x2";
-            int iTwo = (int)EthHex.HexStringToInt(sTwo);
-            Assert.IsTrue(Equals(iTwo, 2));
+            BigInteger quantity = 65;
+            string expectedValue = "0x41";
+            Assert.IsTrue(Equals(expectedValue, EthHex.ToHexString(quantity)));
 
-            sTwo = "0x02";
-            iTwo = (int)EthHex.HexStringToInt(sTwo);
-            Assert.IsTrue(Equals(iTwo, 2));
+            quantity = 1024;
+            expectedValue = "0x400";
+            Assert.IsTrue(Equals(expectedValue, EthHex.ToHexString(quantity)));
+
+            quantity = BigInteger.Zero;
+            expectedValue = "0x0";
+            Assert.IsTrue(Equals(expectedValue, EthHex.ToHexString(quantity)));
         }
 
         [TestMethod]
-        public void HexConverterShouldConvertZeroCorrectly()
+        public void ShouldConvertDataCorrectly()
         {
-            string sZero = EthHex.IntToHexString(BigInteger.Zero);
-            Assert.IsTrue(Equals(sZero, "0x00"));
+            byte[] data = new[] { (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00 };
+            string expectedValue = "0x00000000";
 
-            BigInteger bZero = EthHex.HexStringToInt("0x0");
-            Assert.IsTrue(Equals(BigInteger.Zero, bZero));
+            Assert.IsTrue(Equals(EthHex.ToHexString(data), expectedValue));
 
-            bZero = EthHex.HexStringToInt("0x00");
-            Assert.IsTrue(Equals(BigInteger.Zero, bZero));
+            data = new[] { (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x01 };
+            expectedValue = "0x00000001";
 
-            bZero = EthHex.HexStringToInt("0");
-            Assert.IsTrue(Equals(BigInteger.Zero, bZero));
+            Assert.IsTrue(Equals(EthHex.ToHexString(data), expectedValue));
+        }
 
-            bZero = EthHex.HexStringToInt("0x0000000000000000000");
-            Assert.IsTrue(Equals(BigInteger.Zero, bZero));
-
-            int iZero = (int)EthHex.HexStringToInt("0x0");
-            Assert.IsTrue(Equals(0, iZero));
-
-            iZero = (int)EthHex.HexStringToInt("0x00");
-            Assert.IsTrue(Equals(0, iZero));
-
-            iZero = (int)EthHex.HexStringToInt("0x000000000000000000000");
-            Assert.IsTrue(Equals(0, iZero));
+        [TestMethod]
+        public void ShouldConvertZeroCorrectly()
+        {
+            string sZero = EthHex.ToHexString(BigInteger.Zero);
+            Assert.IsTrue(Equals(sZero, "0x0"));
         }
 
         [TestMethod]
