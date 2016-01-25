@@ -52,6 +52,7 @@
     <Compile Include="Json\EthSyncing.cs" />
     <Compile Include="Json\EthTransaction.cs" />
     <Compile Include="Json\EthTransactionReceipt.cs" />
+    <Compile Include="Json\SolidityContract.cs" />
     <Compile Include="Utilities\EthSpecs.cs" />
     <Compile Include="EthException.cs" />
     <Compile Include="Json\IJsonSerializer.cs" />

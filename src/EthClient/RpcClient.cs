@@ -871,7 +871,7 @@ namespace Eth
         /// <param name="sourceCode">The source code.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
         /// <returns>The compiled source code</returns>
-        public async Task<dynamic> EthCompileSolidityAsync(string sourceCode)
+        public async Task<ICollection<SolidityContract>> EthCompileSolidityAsync(string sourceCode)
         {
             Ensure.EnsureStringIsNotNullOrEmpty(sourceCode, "sourceCode");
 
@@ -883,9 +883,9 @@ namespace Eth
                 Parameters = new[] { sourceCode }
             };
 
-            RpcResponse<dynamic> response = await PostRequestAsync<dynamic>(request);
+            RpcResponse<IDictionary<string, SolidityContract>> response = await PostRequestAsync<IDictionary<string, SolidityContract>>(request);
 
-            return response.Result;
+            return response.Result.Select(x => { x.Value.ContractName = x.Key; return x.Value; }).ToArray();
         }
 
         /// <summary>
