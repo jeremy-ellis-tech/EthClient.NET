@@ -1026,6 +1026,35 @@ namespace Eth
         }
 
         /// <summary>
+        /// Returns an array of all logs matching a given filter object.
+        /// </summary>
+        /// <param name="filterOptions">the filter object</param>
+        /// <returns>Array of log objects, or an empty array if nothing has changed since last poll</returns>
+        public async Task<dynamic> EthGetLogsAsync(EthFilterOptions filterOptions)
+        {
+            RpcRequest request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "eth_getLogs",
+                Parameters = new[]
+                {
+                    new
+                    {
+                        fromBlock = filterOptions.FromBlock != null ? filterOptions.FromBlock.BlockNumber.HasValue ? EthHex.ToHexString(filterOptions.FromBlock.BlockNumber.Value) : filterOptions.FromBlock.Option.ToString().ToLowerInvariant() : null,
+                        toBlock = filterOptions.ToBlock != null ? filterOptions.ToBlock.BlockNumber.HasValue ? EthHex.ToHexString(filterOptions.ToBlock.BlockNumber.Value) : filterOptions.ToBlock.Option.ToString().ToLowerInvariant() : null,
+                        address = filterOptions.Address,
+                        topics = filterOptions.Topics != null ? filterOptions.Topics : null
+                    }
+                }
+            };
+
+            RpcResponse<dynamic> rpcResponse = await PostRpcRequestAsync<dynamic>(request);
+
+            return rpcResponse.Result;
+        }
+
+        /// <summary>
         /// Returns the hash of the current block, the seedHash, and the boundary condition to be met 
         /// </summary>
         /// <returns>EthWork with current block hash, seed hash, and boundary condition</returns>

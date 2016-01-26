@@ -7,12 +7,11 @@ _Currently a work in progress._ Not all of the RPC methods have been implemented
 ### List all your balances
     using (var client = new RpcClient())
     {
-        ICollection<byte[]> accounts = await client.EthAccountsAsync();
-
+        IEnumerable<byte[]> accounts = await client.EthAccountsAsync();
         foreach (var account in accounts)
         {
-            var balance = await client.EthGetBalanceAsync(account, DefaultBlock.Latest);
-            Console.WriteLine("Account: {0} - Balance: {1} wei", EthHex.ByteArrayToHexString(account), balance);
+            BigInteger balance = await client.EthGetBalanceAsync(account, DefaultBlock.Latest);
+            Console.WriteLine("Account: {0} - Balance: {1}", EthHex.ToHexString(account), balance);
         }
     }
 
