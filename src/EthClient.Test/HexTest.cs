@@ -60,13 +60,6 @@ namespace EthClient.Test
         }
 
         [TestMethod]
-        public void ShouldConvertZeroCorrectly()
-        {
-            string sZero = EthHex.ToHexString(BigInteger.Zero);
-            Assert.IsTrue(Equals(sZero, "0x0"));
-        }
-
-        [TestMethod]
         public void TwoDifferentStringShouldNotHaveEqualValuesOrQuantities()
         {
             string hex0 = "0x123";
