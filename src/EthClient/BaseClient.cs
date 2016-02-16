@@ -226,7 +226,7 @@ namespace Eth
                                     .Select(x => new
                                     {
                                         from = EthHex.ToHexString(x.From),
-                                        to = EthHex.ToHexString(x.To),
+                                        to = x.To != null ? EthHex.ToHexString(x.To) : null,
                                         gas = x.Gas != null ? EthHex.ToHexString(x.Gas.Value) : null,
                                         gasPrice = x.GasPrice != null ? EthHex.ToHexString(x.GasPrice.Value) : null,
                                         value = x.Value != null ? EthHex.ToHexString(x.Value.Value) : null,
