@@ -1,7 +1,10 @@
 # EthClient.NET v0.1a
-The super simple Ethereum JSON RPC client. Use native .NET types with Ethereum.
+The super simple Ethereum Portable Class Library (PCL) API client. Use native .NET types with Ethereum.
 
-_Currently a work in progress._ Not all of the RPC methods have been implemented yet.
+_Currently a work in progress._
+
+This library has _both_ an RPC and IPC client. The IPC client can be found in the EthClient.Windows class library.
+The IPC client is not in a PCL since it requires classes referencing named Windows pipes.
 
 ## Examples
 ### List all your balances

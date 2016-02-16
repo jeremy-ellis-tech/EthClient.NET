@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.IO.Pipes;
 
 namespace EthClient.Test
 {
@@ -103,7 +104,7 @@ namespace EthClient.Test
         [ExpectedException(typeof(UriFormatException))]
         public void ShouldNotBeAbleToCreateRpcClientWithInvalidUri()
         {
-            RpcClient client = new RpcClient("127.0.0.1:-1");
+            BaseClient client = new RpcClient("127.0.0.1:-1");
         }
     }
 }

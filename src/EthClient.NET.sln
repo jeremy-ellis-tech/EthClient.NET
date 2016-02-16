@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EthClient", "EthClient\EthC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EthClient.Test", "EthClient.Test\EthClient.Test.csproj", "{D7791601-49AE-4560-93CF-3E6314086F6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EthClient.Windows", "EthClient.Windows\EthClient.Windows.csproj", "{7ADE6CE0-C4F2-49BE-AF8D-031CD9B51EAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D7791601-49AE-4560-93CF-3E6314086F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7791601-49AE-4560-93CF-3E6314086F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7791601-49AE-4560-93CF-3E6314086F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ADE6CE0-C4F2-49BE-AF8D-031CD9B51EAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ADE6CE0-C4F2-49BE-AF8D-031CD9B51EAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ADE6CE0-C4F2-49BE-AF8D-031CD9B51EAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ADE6CE0-C4F2-49BE-AF8D-031CD9B51EAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

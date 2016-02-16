@@ -6,7 +6,7 @@ namespace Eth
     {
         public int ErrorCode { get; private set; }
 
-        internal EthException(int errorCode, string message) : base(message)
+        public EthException(int errorCode, string message) : base(message)
         {
             ErrorCode = errorCode;
         }

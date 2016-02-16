@@ -38,6 +38,7 @@
     <Compile Include="EthLog.cs" />
     <Compile Include="EthSyncing.cs" />
     <Compile Include="EthTransactionReceipt.cs" />
+    <Compile Include="RpcClient.cs" />
     <Compile Include="Json\EthFilterOptions.cs" />
     <Compile Include="Json\EthLog.cs" />
     <Compile Include="Json\EthSyncing.cs" />
@@ -49,7 +50,7 @@
     <Compile Include="Json\IJsonSerializer.cs" />
     <Compile Include="Json\JsonSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RpcClient.cs" />
+    <Compile Include="BaseClient.cs" />
     <Compile Include="DefaultBlock.cs" />
     <Compile Include="Json\EthBlock.cs" />
     <Compile Include="EthCall.cs" />
