@@ -18,7 +18,6 @@ namespace Eth
         public EthTransaction(byte[] from, byte[] data, byte[] to = null, BigInteger? gas = null, BigInteger? gasPrice = null, BigInteger? value = null, BigInteger? nonce = null)
         {
             Ensure.EnsureParameterIsNotNull(from, "from");
-            Ensure.EnsureParameterIsNotNull(data, "data");
             Ensure.EnsureCountIsCorrect(from, EthSpecs.AddressLength, "from");
 
             if(to != null)

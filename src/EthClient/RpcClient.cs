@@ -269,7 +269,7 @@ namespace Eth
                                         gas = x.Gas != null ? EthHex.ToHexString(x.Gas.Value) : null,
                                         gasPrice = x.GasPrice != null ? EthHex.ToHexString(x.GasPrice.Value) : null,
                                         value = x.Value != null ? EthHex.ToHexString(x.Value.Value) : null,
-                                        data = EthHex.ToHexString(x.Data),
+                                        data = x.Data != null ? EthHex.ToHexString(x.Data) : null,
                                         nonce = x.Nonce != null ? EthHex.ToHexString(x.Nonce.Value) : null
                                     })
             };
@@ -794,7 +794,7 @@ namespace Eth
 
         private static EthTransaction GetEthTransaction(Json.EthTransaction transaction)
         {
-            if(transaction == null)
+            if (transaction == null)
             {
                 return null;
             }
@@ -823,7 +823,21 @@ namespace Eth
 
             RpcResponse<Json.EthTransactionReceipt> response = await PostRpcRequestAsync<Json.EthTransactionReceipt>(request);
 
-            return new EthTransactionReceipt(); //TODO
+            Json.EthTransactionReceipt result = response.Result;
+
+            if (result == null) return null;
+
+            return new EthTransactionReceipt
+            {
+                BlockHash = EthHex.HexStringToByteArray(result.BlockHash),
+                BlockNumber = EthHex.HexStringToInt(result.BlockNumber),
+                ContractAddress = result.ContractAddress != null ? EthHex.HexStringToByteArray(result.ContractAddress) : null,
+                CumulativeGasUsed = EthHex.HexStringToInt(result.CumulativeGasUsed),
+                GasUsed = EthHex.HexStringToInt(result.GasUsed),
+                TransactionIndex = EthHex.HexStringToInt(result.TransactionIndex),
+                TransactionHash = EthHex.HexStringToByteArray(result.TransactionHash),
+                Logs = result.Logs
+            };
         }
 
         /// <summary>
