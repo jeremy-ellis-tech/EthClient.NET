@@ -9,10 +9,6 @@ namespace Eth
 {
     public class RpcClient : BaseClient, IDisposable
     {
-        private static readonly string DefaultUri = "http://127.0.0.1:8545";
-        private static readonly HttpClient DefaultHttpClient = new HttpClient();
-        private static readonly IJsonSerializer DefaultJsonSerializer = new JsonSerializer();
-
         protected readonly Uri _nodeAddress;
         protected readonly HttpClient _httpClient;
         protected readonly IJsonSerializer _jsonSerializer;
@@ -44,6 +40,21 @@ namespace Eth
             _nodeAddress = new UriBuilder(nodeAddress).Uri;
             _httpClient = httpClient;
             _jsonSerializer = jsonSerializer;
+        }
+
+        private static HttpClient DefaultHttpClient
+        {
+            get { return new HttpClient(); }
+        }
+
+        private static IJsonSerializer DefaultJsonSerializer
+        {
+            get { return new JsonSerializer(); }
+        }
+
+        private static string DefaultUri
+        {
+            get { return "http://127.0.0.1:8545"; }
         }
 
         /// <summary>

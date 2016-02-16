@@ -10,8 +10,15 @@ namespace Eth
 {
     public class IpcClient : BaseClient, IDisposable
     {
-        private static readonly string DefaultPipePath = "geth.ipc";
-        private static readonly IJsonSerializer DefaultJsonSerializer = new JsonSerializer();
+        private static string DefaultPipePath
+        {
+            get { return "geth.ipc"; }
+        }
+
+        private static IJsonSerializer DefaultJsonSerializer
+        {
+            get { return new JsonSerializer(); }
+        }
 
         protected readonly IJsonSerializer _jsonSerializer;
         protected readonly NamedPipeClientStream _pipeStream;
