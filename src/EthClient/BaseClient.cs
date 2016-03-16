@@ -13,8 +13,8 @@ namespace Eth
     /// </summary>
     public abstract class BaseClient
     {
-        private static string DefaultJsonRpc = "2.0";
-        private static int DefaultRequestId = 0;
+        protected static string DefaultJsonRpc = "2.0";
+        protected static int DefaultRequestId = 0;
 
         /// <summary>
         /// Returns the current client version.

@@ -49,6 +49,26 @@ namespace Eth
             _jsonSerializer = jsonSerializer;
         }
 
+        /// <summary>
+        /// Creates a new account
+        /// </summary>
+        /// <param name="password">The password to use for the account</param>
+        /// <returns>The address of the created account</returns>
+        public async Task<byte[]> PersonalNewAccountAsync(string password)
+        {
+            var req = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "personal_newAccount",
+                Parameters = new[]{ password }
+            };
+
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(req);
+
+            return EthHex.HexStringToByteArray(response.Result);
+        }
+
         public override async Task<RpcResponse<T>> PostRpcRequestAsync<T>(RpcRequest request)
         {
             string jsonRequest = _jsonSerializer.Serialize(request);
