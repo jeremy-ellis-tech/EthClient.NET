@@ -49,59 +49,6 @@ namespace Eth
             _jsonSerializer = jsonSerializer;
         }
 
-        /// <summary>
-        /// Creates a new account
-        /// </summary>
-        /// <param name="password">The password to use for the account</param>
-        /// <returns>The address of the created account</returns>
-        public async Task<byte[]> PersonalNewAccountAsync(string password)
-        {
-            var request = new RpcRequest
-            {
-                ID = DefaultRequestId,
-                JsonRpc = DefaultJsonRpc,
-                MethodName = "personal_newAccount",
-                Parameters = new[]{ password }
-            };
-
-            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
-
-            return EthHex.HexStringToByteArray(response.Result);
-        }
-
-        /// <summary>
-        /// Unlock account to send transactions/sign etc.
-        /// </summary>
-        /// <param name="address">Address of account to unlock</param>
-        /// <param name="password">The password with which to unlock the account</param>
-        /// <param name="duration">The duration the account should remain unlocked</param>
-        /// <returns>True if account was successfully unlocked, false otherwise</returns>
-        public async Task<bool> PersonalUnlockAccountAsync(byte[] address, string password, TimeSpan duration)
-        {
-            var request = new RpcRequest
-            {
-                ID = DefaultRequestId,
-                JsonRpc = DefaultJsonRpc,
-                MethodName = "personal_unlockAccount",
-                Parameters = new object[] { EthHex.ToHexString(address), password, (int)duration.TotalSeconds }
-            };
-
-            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
-
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Unlock account for 1 minute to send transactions/sign etc.
-        /// </summary>
-        /// <param name="address">Address of account to unlock</param>
-        /// <param name="password">The password with which to unlock the account</param>
-        /// <returns>True if account was successfully unlocked, false otherwise</returns>
-        public async Task<bool> PersonalUnlockAccountAsync(byte[] address, string password)
-        {
-            return await PersonalUnlockAccountAsync(address, password, TimeSpan.FromMinutes(1.0));
-        }
-
         public override async Task<RpcResponse<T>> PostRpcRequestAsync<T>(RpcRequest request)
         {
             string jsonRequest = _jsonSerializer.Serialize(request);

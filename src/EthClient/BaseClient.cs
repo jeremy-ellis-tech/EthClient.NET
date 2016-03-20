@@ -301,7 +301,7 @@ namespace Eth
         /// Returns a list of addresses owned by the client
         /// </summary>
         /// <returns>Array of 20 bytes, address owned by the client</returns>
-        public async Task<ICollection<byte[]>> EthAccountsAsync()
+        public async Task<IList<byte[]>> EthAccountsAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -313,7 +313,12 @@ namespace Eth
 
             RpcResponse<IEnumerable<string>> response = await PostRpcRequestAsync<IEnumerable<string>>(request);
 
-            return response.Result.Select(x => EthHex.HexStringToByteArray(x)).ToArray();
+            if(response.Result == null)
+            {
+                return Enumerable.Empty<byte[]>().ToList();
+            }
+
+            return response.Result.Select(x => EthHex.HexStringToByteArray(x)).ToList();
         }
 
         /// <summary>
@@ -805,7 +810,7 @@ namespace Eth
         /// Returns a list of available compilers in the client.
         /// </summary>
         /// <returns>Available compilers</returns>
-        public async Task<IEnumerable<string>> EthGetCompilersAsync()
+        public async Task<IList<string>> EthGetCompilersAsync()
         {
             RpcRequest request = new RpcRequest
             {
@@ -815,7 +820,12 @@ namespace Eth
                 Parameters = RpcRequest.EmptyParameters
             };
 
-            RpcResponse<IEnumerable<string>> response = await PostRpcRequestAsync<IEnumerable<string>>(request);
+            RpcResponse<IList<string>> response = await PostRpcRequestAsync<IList<string>>(request);
+
+            if(response.Result == null)
+            {
+                return Enumerable.Empty<string>().ToList();
+            }
 
             return response.Result;
         }
@@ -826,7 +836,7 @@ namespace Eth
         /// <param name="sourceCode">The source code.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
         /// <returns>The compiled source code</returns>
-        public async Task<ICollection<SolidityContract>> EthCompileSolidityAsync(string sourceCode)
+        public async Task<IList<SolidityContract>> EthCompileSolidityAsync(string sourceCode)
         {
             Ensure.EnsureStringIsNotNullOrEmpty(sourceCode, "sourceCode");
 
@@ -840,7 +850,7 @@ namespace Eth
 
             RpcResponse<IDictionary<string, SolidityContract>> response = await PostRpcRequestAsync<IDictionary<string, SolidityContract>>(request);
 
-            return response.Result.Select(x => { x.Value.ContractName = x.Key; return x.Value; }).ToArray();
+            return response.Result.Select(x => { x.Value.ContractName = x.Key; return x.Value; }).ToList();
         }
 
         /// <summary>
@@ -1098,6 +1108,63 @@ namespace Eth
             RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
 
             return response.Result;
+        }
+
+
+        /// <summary>
+        /// Creates a new account
+        /// Not availible over json RPC by default.
+        /// You must start geth with --rpcapi "personal,web3,eth"
+        /// to use "Personal*" methods.
+        /// </summary>
+        /// <param name="password">The password to use for the account</param>
+        /// <returns>The address of the created account</returns>
+        public async Task<byte[]> PersonalNewAccountAsync(string password)
+        {
+            var request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "personal_newAccount",
+                Parameters = new[] { password }
+            };
+
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
+
+            return EthHex.HexStringToByteArray(response.Result);
+        }
+
+        /// <summary>
+        /// Unlock account to send transactions/sign etc.
+        /// </summary>
+        /// <param name="address">Address of account to unlock</param>
+        /// <param name="password">The password with which to unlock the account</param>
+        /// <param name="duration">The duration the account should remain unlocked</param>
+        /// <returns>True if account was successfully unlocked, false otherwise</returns>
+        public async Task<bool> PersonalUnlockAccountAsync(byte[] address, string password, TimeSpan duration)
+        {
+            var request = new RpcRequest
+            {
+                ID = DefaultRequestId,
+                JsonRpc = DefaultJsonRpc,
+                MethodName = "personal_unlockAccount",
+                Parameters = new object[] { EthHex.ToHexString(address), password, (int)duration.TotalSeconds }
+            };
+
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
+
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Unlock account for 1 minute to send transactions/sign etc.
+        /// </summary>
+        /// <param name="address">Address of account to unlock</param>
+        /// <param name="password">The password with which to unlock the account</param>
+        /// <returns>True if account was successfully unlocked, false otherwise</returns>
+        public async Task<bool> PersonalUnlockAccountAsync(byte[] address, string password)
+        {
+            return await PersonalUnlockAccountAsync(address, password, TimeSpan.FromMinutes(1.0));
         }
 
         /// <summary>
