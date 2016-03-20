@@ -18,7 +18,7 @@ namespace Eth.Utilities
         /// <returns>Hex string as a quantity</returns>
         public static BigInteger HexStringToInt(string hex)
         {
-            return new BigInteger(HexStringToByteArray(hex));
+            return new BigInteger(HexStringToByteArray(hex).Reverse().ToArray());
         }
 
         /// <summary>

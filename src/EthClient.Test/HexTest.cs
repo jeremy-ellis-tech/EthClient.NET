@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Numerics;
+using System.Linq;
 
 namespace EthClient.Test
 {
@@ -30,7 +31,7 @@ namespace EthClient.Test
         }
 
         [TestMethod]
-        public void ShouldConvertQuantitiesCorrectly()
+        public void ShouldConvertFromQuantitiesCorrectly()
         {
             BigInteger quantity = 65;
             string expectedValue = "0x41";
@@ -43,6 +44,15 @@ namespace EthClient.Test
             quantity = BigInteger.Zero;
             expectedValue = "0x0";
             Assert.IsTrue(Equals(expectedValue, EthHex.ToHexString(quantity)));
+        }
+
+        [TestMethod]
+        public void ShouldConvertToQuantitiesCorrectly()
+        {
+            string quantity = "0x270801d946c940000";
+            BigInteger expectedValue = new BigInteger(new[] { (byte)0x02, (byte)0x70, (byte)0x80, (byte)0x1d, (byte)0x94, (byte)0x6c, (byte)0x94, (byte)0x00, (byte)0x00 }.Reverse().ToArray());
+            BigInteger actualValue = EthHex.HexStringToInt(quantity);
+            Assert.IsTrue(Equals(expectedValue, actualValue));
         }
 
         [TestMethod]
