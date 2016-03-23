@@ -4,7 +4,7 @@ namespace Eth
 {
     public class EthWork
     {
-        internal EthWork(byte[] blockHash, byte[] seedHash, byte[]boundaryCondition)
+        internal EthWork(byte[] blockHash, byte[] seedHash, byte[] boundaryCondition)
         {
             Ensure.EnsureParameterIsNotNull(blockHash, "blockHash");
             Ensure.EnsureParameterIsNotNull(seedHash, "seedHash");

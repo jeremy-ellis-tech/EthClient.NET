@@ -47,6 +47,36 @@ namespace Eth
                 return new DefaultBlock(DefaultBlockOption.Pending);
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, this)) return true;
+
+            var other = obj as DefaultBlock;
+
+            if (other == null) return false;
+
+            if(other.BlockNumber.HasValue)
+            {
+                return Equals(other.BlockNumber, BlockNumber);
+            }
+            else
+            {
+                return Equals(other.Option, Option);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            if(BlockNumber.HasValue)
+            {
+                return BlockNumber.Value.GetHashCode();
+            }
+            else
+            {
+                return Option.GetHashCode();
+            }
+        }
     }
 
     public enum DefaultBlockOption

@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Eth.Json
 {
@@ -11,7 +10,5 @@ namespace Eth.Json
 
         [JsonProperty("params")]
         public IEnumerable<object> Parameters { get; set; }
-
-        public static IEnumerable<object> EmptyParameters { get { return Enumerable.Empty<object>(); } }
     }
 }

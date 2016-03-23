@@ -30,7 +30,15 @@ namespace Eth.Utilities
         /// <returns>The byte array value</returns>
         public static byte[] HexStringToByteArray(string hex)
         {
-            Ensure.EnsureStringIsNotNullOrEmpty(hex, "hex");
+            if(hex == null)
+            {
+                return null;
+            }
+
+            if(String.Equals(String.Empty, hex))
+            {
+                return Enumerable.Empty<byte>().ToArray();
+            }
 
             var sb = new StringBuilder(hex.ToUpperInvariant());
 

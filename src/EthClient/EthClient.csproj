@@ -38,6 +38,11 @@
     <Compile Include="EthLog.cs" />
     <Compile Include="EthSyncing.cs" />
     <Compile Include="EthTransactionReceipt.cs" />
+    <Compile Include="Json\BigIntegerConverter.cs" />
+    <Compile Include="Json\ByteArrayConverter.cs" />
+    <Compile Include="Json\DefaultBlockConverter.cs" />
+    <Compile Include="Json\EthSyncingConverter.cs" />
+    <Compile Include="Json\NullableConverter.cs" />
     <Compile Include="RpcClient.cs" />
     <Compile Include="Json\EthFilterOptions.cs" />
     <Compile Include="Json\EthLog.cs" />

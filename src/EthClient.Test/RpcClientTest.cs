@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net;
 using System.Net.Http;
-using System.IO.Pipes;
 
 namespace EthClient.Test
 {
@@ -30,7 +29,7 @@ namespace EthClient.Test
                     ID = 0,
                     JsonRpc = "2.0",
                     MethodName = "eth_getWork",
-                    Parameters = RpcRequest.EmptyParameters
+                    Parameters = null
                 }).Result;
             }
             catch (AggregateException ex)
@@ -63,7 +62,7 @@ namespace EthClient.Test
                     ID = 0,
                     JsonRpc = "2.0",
                     MethodName = "eth_getWork",
-                    Parameters = RpcRequest.EmptyParameters
+                    Parameters = null
                 }).Result;
             }
             catch (AggregateException ex)
@@ -91,7 +90,7 @@ namespace EthClient.Test
                     ID = 0,
                     JsonRpc = "2.0",
                     MethodName = "eth_getWork",
-                    Parameters = RpcRequest.EmptyParameters
+                    Parameters = null
                 }).Result;
             }
             catch (AggregateException ex)

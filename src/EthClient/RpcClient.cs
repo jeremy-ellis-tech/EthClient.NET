@@ -85,9 +85,7 @@ namespace Eth
                 throw new EthException(rpcError.Error.ErrorCode, rpcError.Error.Message);
             }
 
-            RpcResponse<T> rpcResponse = _jsonSerializer.Deserialize<RpcResponse<T>>(jsonResponse);
-
-            return rpcResponse;
+            return _jsonSerializer.Deserialize<RpcResponse<T>>(jsonResponse);
         }
 
         private bool _disposed = false;

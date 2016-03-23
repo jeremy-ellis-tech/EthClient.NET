@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace Eth.Json
 {
@@ -11,7 +13,14 @@ namespace Eth.Json
             _serializerSettings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Formatting.Indented
+                Converters = new List<JsonConverter>
+                {
+                    new ByteArrayConverter(),
+                    new BigIntegerConverter(),
+                    new DefaultBlockConverter(),
+                    new EthSyncingConverter(),
+                    new NullableConverter<BigInteger>(),
+                }
             };
         }
 

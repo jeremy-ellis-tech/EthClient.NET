@@ -17,20 +17,6 @@ namespace EthClient.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ShouldThrowIfNull()
-        {
-            EthHex.HexStringToByteArray(null);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ShouldThrowIfEmpty()
-        {
-            EthHex.HexStringToByteArray(String.Empty);
-        }
-
-        [TestMethod]
         public void ShouldConvertFromQuantitiesCorrectly()
         {
             BigInteger quantity = 65;
