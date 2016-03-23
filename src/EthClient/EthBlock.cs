@@ -49,7 +49,7 @@ namespace Eth
         /// <summary>
         /// 32 Bytes - the root of the receipts trie of the block.
         /// </summary>
-        public byte[] ReceiptsRoot { get; set; }
+        public byte[] ReceiptRoot { get; set; }
 
         /// <summary>
         /// 20 Bytes - the address of the beneficiary to whom the mining rewards were given.
@@ -94,11 +94,11 @@ namespace Eth
         /// <summary>
         /// Array of transaction objects, or 32 Bytes transaction hashes depending on the last given parameter.
         /// </summary>
-        public IEnumerable<object> Transactions { get; set; }
+        public IEnumerable<byte[]> Transactions { get; set; }
 
         /// <summary>
         /// Array of uncle hashes.
         /// </summary>
-        public IEnumerable<byte[]> Unlces { get; set; }
+        public IEnumerable<byte[]> Uncles { get; set; }
     }
 }

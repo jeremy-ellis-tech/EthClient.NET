@@ -35,7 +35,7 @@ namespace Eth.Utilities
                 return null;
             }
 
-            if(String.Equals(String.Empty, hex))
+            if(String.Equals(String.Empty, hex) || String.Equals("0X", hex.ToUpperInvariant()))
             {
                 return Enumerable.Empty<byte>().ToArray();
             }

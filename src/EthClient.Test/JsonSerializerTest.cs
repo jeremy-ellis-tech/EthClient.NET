@@ -163,7 +163,7 @@ namespace EthClient.Test
             string actual = _serializer.Serialize(ethSyncing);
             Assert.IsTrue(Equals(expected, actual));
 
-            ethSyncing = new EthSyncing(1,2,3);
+            ethSyncing = new EthSyncing(1, 2, 3);
             expected = "\"startingBlock\":\"0x1\",\"currentBlock\":\"0x2\",\"highestBlock\":\"0x3\"";
             actual = _serializer.Serialize(ethSyncing);
             Assert.IsTrue(Equals(expected, actual));

@@ -20,6 +20,8 @@ namespace Eth.Json
                     new DefaultBlockConverter(),
                     new EthSyncingConverter(),
                     new NullableConverter<BigInteger>(),
+                    new EthBlockConverter(),
+                    new DateTimeOffsetConverter()
                 }
             };
         }

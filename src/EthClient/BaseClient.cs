@@ -326,6 +326,7 @@ namespace Eth
 
         /// <summary>
         /// Signs data with a given address.
+        /// NB. the address to sign must be unlocked.
         /// </summary>
         /// <param name="address">20 Bytes - address</param>
         /// <param name="data">Data to sign</param>
@@ -353,39 +354,18 @@ namespace Eth
             return response.Result;
         }
 
-        ///// <summary>
-        ///// Makes a call or transaction, which won't be added to the blockchain and returns the used gas, which can be used for estimating the used gas.
-        ///// </summary>
-        ///// <param name="call">The transaction call object</param>
-        ///// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
-        ///// <returns>the amount of gas used.</returns>
-        //public async Task<BigInteger> EthEstimateGasAsync(EthCall call, DefaultBlock defaultBlock)
-        //{
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_estimateGas",
-        //        Parameters = new object[]
-        //        {
-        //            new
-        //            {
-        //                from = call.From,
-        //                to = call.To,
-        //                gas = call.Gas,
-        //                gasPrice = call.GasPrice,
-        //                value = call.Value,
-        //                data = call.Data
-        //            },
-
-        //            defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant()
-        //        }
-        //    };
-
-        //    RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
-
-        //    return EthHex.HexStringToInt(response.Result);
-        //}
+        /// <summary>
+        /// Makes a call or transaction, which won't be added to the blockchain and returns the used gas, which can be used for estimating the used gas.
+        /// </summary>
+        /// <param name="call">The transaction call object</param>
+        /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
+        /// <returns>the amount of gas used.</returns>
+        public async Task<BigInteger> EthEstimateGasAsync(EthCall call, DefaultBlock defaultBlock)
+        {
+            RpcRequest request = BuildRpcRequest("eth_estimateGas", new { from = call.From, to = call.To, gas = call.Gas, gasPrice = call.GasPrice, value = call.Value, data = call.Data }, defaultBlock);
+            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
+            return response.Result;
+        }
 
         /// <summary>
         /// Returns information about a block by hash.
@@ -403,56 +383,18 @@ namespace Eth
             return response.Result;
         }
 
-        ///// <summary>
-        ///// Returns information about a block by block number.
-        ///// </summary>
-        ///// <param name="defaultBlock">integer of a block number, or the string "earliest", "latest" or "pending"</param>
-        ///// <param name="fullTransaction">If true it returns the full transaction objects, if false only the hashes of the transactions</param>
-        ///// <returns></returns>
-        //public async Task<EthBlock> EthGetBlockByNumberAsync(DefaultBlock defaultBlock, bool fullTransaction)
-        //{
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_getBlockByNumber",
-        //        Parameters = new object[]
-        //        {
-        //            defaultBlock.BlockNumber.HasValue ? EthHex.ToHexString(defaultBlock.BlockNumber.Value) : defaultBlock.Option.ToString().ToLowerInvariant(),
-        //            fullTransaction
-        //        }
-        //    };
-
-        //    RpcResponse<Json.EthBlock> response = await PostRpcRequestAsync<Json.EthBlock>(request);
-
-        //    return GetEthBlock(response.Result);
-        //}
-
-        //private static EthBlock GetEthBlock(Json.EthBlock ethBlock)
-        //{
-        //    return new EthBlock
-        //    {
-        //        Number = String.IsNullOrEmpty(ethBlock.Number) ? (BigInteger?)null : EthHex.HexStringToInt(ethBlock.Number),
-        //        Hash = String.IsNullOrEmpty(ethBlock.Number) ? null : EthHex.HexStringToByteArray(ethBlock.Hash),
-        //        ParentHash = EthHex.HexStringToByteArray(ethBlock.ParentHash),
-        //        Nonce = String.IsNullOrEmpty(ethBlock.Nonce) ? null : EthHex.HexStringToByteArray(ethBlock.Nonce),
-        //        Sha3Uncles = EthHex.HexStringToByteArray(ethBlock.Sha3Uncles),
-        //        LogsBloom = String.IsNullOrEmpty(ethBlock.LogsBloom) ? null : EthHex.HexStringToByteArray(ethBlock.LogsBloom),
-        //        TransactionRoot = EthHex.HexStringToByteArray(ethBlock.TransactionRoot),
-        //        StateRoot = EthHex.HexStringToByteArray(ethBlock.StateRoot),
-        //        ReceiptsRoot = EthHex.HexStringToByteArray(ethBlock.ReceiptsRoot),
-        //        Miner = EthHex.HexStringToByteArray(ethBlock.Miner),
-        //        Difficulty = EthHex.HexStringToInt(ethBlock.Difficulty),
-        //        TotalDifficulty = EthHex.HexStringToInt(ethBlock.TotalDifficulty),
-        //        ExtraData = EthHex.HexStringToByteArray(ethBlock.ExtraData),
-        //        Size = EthHex.HexStringToInt(ethBlock.Size),
-        //        GasLimit = EthHex.HexStringToInt(ethBlock.GasLimit),
-        //        GasUsed = EthHex.HexStringToInt(ethBlock.GasUsed),
-        //        TimeStamp = DateTimeOffset.Parse(ethBlock.TimeStamp),
-        //        Transactions = ethBlock.Transactions, //TODO
-        //        Unlces = ethBlock.Unlces.Select(x => EthHex.HexStringToByteArray(x))
-        //    };
-        //}
+        /// <summary>
+        /// Returns information about a block by block number.
+        /// </summary>
+        /// <param name="defaultBlock">integer of a block number, or the string "earliest", "latest" or "pending"</param>
+        /// <param name="fullTransaction">If true it returns the full transaction objects, if false only the hashes of the transactions</param>
+        /// <returns></returns>
+        public async Task<EthBlock> EthGetBlockByNumberAsync(DefaultBlock defaultBlock, bool fullTransaction)
+        {
+            RpcRequest request = BuildRpcRequest("eth_getBlockByNumber", defaultBlock, fullTransaction);
+            RpcResponse<EthBlock> response = await PostRpcRequestAsync<EthBlock>(request);
+            return response.Result;
+        }
 
         /// <summary>
         /// Returns the information about a transaction requested by transaction hash.
@@ -465,8 +407,8 @@ namespace Eth
             Ensure.EnsureCountIsCorrect(transactionHash, EthSpecs.TransactionHashLength, "transactionHash");
 
             RpcRequest request = BuildRpcRequest("eth_getTransactionByHash", transactionHash);
-            RpcResponse<Json.EthTransaction> response = await PostRpcRequestAsync<Json.EthTransaction>(request);
-            return GetEthTransaction(response.Result);
+            RpcResponse<EthTransaction> response = await PostRpcRequestAsync<EthTransaction>(request);
+            return response.Result;
         }
 
         /// <summary>
@@ -478,57 +420,25 @@ namespace Eth
         public async Task<EthTransaction> EthGetTransactionByBlockNumberAndIndexAsync(DefaultBlock defaultBlock, BigInteger position)
         {
             RpcRequest request = BuildRpcRequest("eth_getTransactionByBlockNumberAndIndex", defaultBlock, position);
-            RpcResponse<Json.EthTransaction> response = await PostRpcRequestAsync<Json.EthTransaction>(request);
-            return GetEthTransaction(response.Result);
+            RpcResponse<EthTransaction> response = await PostRpcRequestAsync<EthTransaction>(request);
+            return response.Result;
         }
 
-        private static EthTransaction GetEthTransaction(Json.EthTransaction transaction)
+        /// <summary>
+        /// Returns the receipt of a transaction by transaction hash.
+        /// Note That the receipt is not available for pending transactions.
+        /// </summary>
+        /// <param name="transactionHash">32 Bytes - hash of a transaction</param>
+        /// <returns>A transaction receipt object, or null when no receipt was found</returns>
+        public async Task<EthTransactionReceipt> EthGetTransactionReceiptAsync(byte[] transactionHash)
         {
-            if (transaction == null)
-            {
-                return null;
-            }
+            Ensure.EnsureParameterIsNotNull(transactionHash, "transactionHash");
+            Ensure.EnsureCountIsCorrect(transactionHash, EthSpecs.TransactionHashLength, "transactionHash");
 
-            return new EthTransaction(null, null); //TODO
+            RpcRequest request = BuildRpcRequest("eth_getTransactionReceipt", transactionHash);
+            RpcResponse<EthTransactionReceipt> response = await PostRpcRequestAsync<EthTransactionReceipt>(request);
+            return response.Result;
         }
-
-        ///// <summary>
-        ///// Returns the receipt of a transaction by transaction hash.
-        ///// Note That the receipt is not available for pending transactions.
-        ///// </summary>
-        ///// <param name="transactionHash">32 Bytes - hash of a transaction</param>
-        ///// <returns>A transaction receipt object, or null when no receipt was found</returns>
-        //public async Task<EthTransactionReceipt> EthGetTransactionReceiptAsync(byte[] transactionHash)
-        //{
-        //    Ensure.EnsureParameterIsNotNull(transactionHash, "transactionHash");
-        //    Ensure.EnsureCountIsCorrect(transactionHash, EthSpecs.TransactionHashLength, "transactionHash");
-
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_getTransactionReceipt",
-        //        Parameters = new[] { transactionHash }
-        //    };
-
-        //    RpcResponse<Json.EthTransactionReceipt> response = await PostRpcRequestAsync<Json.EthTransactionReceipt>(request);
-
-        //    Json.EthTransactionReceipt result = response.Result;
-
-        //    if (result == null) return null;
-
-        //    return new EthTransactionReceipt
-        //    {
-        //        BlockHash = EthHex.HexStringToByteArray(result.BlockHash),
-        //        BlockNumber = EthHex.HexStringToInt(result.BlockNumber),
-        //        ContractAddress = result.ContractAddress != null ? EthHex.HexStringToByteArray(result.ContractAddress) : null,
-        //        CumulativeGasUsed = EthHex.HexStringToInt(result.CumulativeGasUsed),
-        //        GasUsed = EthHex.HexStringToInt(result.GasUsed),
-        //        TransactionIndex = EthHex.HexStringToInt(result.TransactionIndex),
-        //        TransactionHash = EthHex.HexStringToByteArray(result.TransactionHash),
-        //        Logs = result.Logs
-        //    };
-        //}
 
         /// <summary>
         /// Returns a list of available compilers in the client.

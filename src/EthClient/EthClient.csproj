@@ -40,7 +40,9 @@
     <Compile Include="EthTransactionReceipt.cs" />
     <Compile Include="Json\BigIntegerConverter.cs" />
     <Compile Include="Json\ByteArrayConverter.cs" />
+    <Compile Include="Json\DateTimeOffsetConverter.cs" />
     <Compile Include="Json\DefaultBlockConverter.cs" />
+    <Compile Include="Json\EthBlockConverter.cs" />
     <Compile Include="Json\EthSyncingConverter.cs" />
     <Compile Include="Json\NullableConverter.cs" />
     <Compile Include="RpcClient.cs" />
@@ -57,7 +59,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseClient.cs" />
     <Compile Include="DefaultBlock.cs" />
-    <Compile Include="Json\EthBlock.cs" />
     <Compile Include="EthCall.cs" />
     <Compile Include="EthWork.cs" />
     <Compile Include="ProofOfWork.cs" />

@@ -56,7 +56,14 @@ namespace Eth.Json
                 throw new ArgumentOutOfRangeException("value");
             }
 
-            writer.WriteValue(db.BlockNumber.HasValue ? EthHex.ToHexString(db.BlockNumber.Value) : db.Option.ToString().ToLowerInvariant());
+            if (db.BlockNumber.HasValue)
+            {
+                serializer.Serialize(writer, db.BlockNumber.Value);
+            }
+            else
+            {
+                writer.WriteValue(db.Option.ToString().ToLowerInvariant());
+            }
         }
 
         public override bool CanRead { get { return true; } }
