@@ -1,28 +1,45 @@
-﻿using Eth.Utilities;
+﻿using System.Linq;
 
 namespace Eth
 {
     public class EthWork
     {
-        internal EthWork(byte[] blockHash, byte[] seedHash, byte[] boundaryCondition)
+        /// <summary>
+        /// current block header pow-hash
+        /// </summary>
+        public byte[] BlockHash { get; set; }
+
+        /// <summary>
+        /// the seed hash used for the DAG.
+        /// </summary>
+        public byte[] SeedHash { get; set; }
+
+        /// <summary>
+        /// the boundary condition ("target"), 2^256 / difficulty.
+        /// </summary>
+        public byte[] BoundaryCondition { get; set; }
+
+        public override bool Equals(object obj)
         {
-            Ensure.EnsureParameterIsNotNull(blockHash, "blockHash");
-            Ensure.EnsureParameterIsNotNull(seedHash, "seedHash");
-            Ensure.EnsureParameterIsNotNull(boundaryCondition, "boundaryCondition");
+            if (ReferenceEquals(obj, this)) return true;
 
-            Ensure.EnsureCountIsCorrect(blockHash, EthSpecs.BlockHashLength, "blockHash");
-            Ensure.EnsureCountIsCorrect(seedHash, EthSpecs.SeedHashLength, "seedHash");
-            Ensure.EnsureCountIsCorrect(boundaryCondition, EthSpecs.BoundaryConditionLength, "boundaryCondition");
+            var other = obj as EthWork;
 
-            BlockHash = blockHash;
-            SeedHash = seedHash;
-            BoundaryCondition = boundaryCondition;
+            if (other == null) return false;
+
+            return BlockHash.SequenceEqual(other.BlockHash)
+                && SeedHash.SequenceEqual(other.SeedHash)
+                && BoundaryCondition.SequenceEqual(other.BoundaryCondition);
         }
 
-        public byte[] BlockHash { get; private set; }
+        public override int GetHashCode()
+        {
+            return BlockHash.GetHashCode() + SeedHash.GetHashCode() + BoundaryCondition.GetHashCode();
+        }
 
-        public byte[] SeedHash { get; private set; }
-
-        public byte[] BoundaryCondition { get; private set; }
+        public override string ToString()
+        {
+            return "EthWork";
+        }
     }
 }

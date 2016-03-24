@@ -29,9 +29,5 @@ namespace Eth.Json
 
             writer.WriteValue(EthHex.ToHexString(bi));
         }
-
-        public override bool CanRead { get { return true; } }
-
-        public override bool CanWrite { get { return true; } }
     }
 }

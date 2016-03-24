@@ -1,13 +1,8 @@
-﻿using Newtonsoft.Json;
-
-namespace Eth.Json
+﻿namespace Eth
 {
     public abstract class RpcMessage
     {
-        [JsonProperty("id")]
         public int ID { get; set; }
-
-        [JsonProperty("jsonrpc")]
         public string JsonRpc { get; set; }
     }
 }

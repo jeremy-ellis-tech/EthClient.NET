@@ -19,6 +19,6 @@ namespace Eth
 
         public byte[] ContractAddress { get; set; }
 
-        public IEnumerable<Json.EthLog> Logs { get; set; }
+        public IEnumerable<EthLog> Logs { get; set; }
     }
 }

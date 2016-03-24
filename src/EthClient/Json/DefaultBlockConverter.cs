@@ -65,9 +65,5 @@ namespace Eth.Json
                 writer.WriteValue(db.Option.ToString().ToLowerInvariant());
             }
         }
-
-        public override bool CanRead { get { return true; } }
-
-        public override bool CanWrite { get { return true; } }
     }
 }

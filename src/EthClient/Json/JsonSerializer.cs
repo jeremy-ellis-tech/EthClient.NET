@@ -21,7 +21,11 @@ namespace Eth.Json
                     new EthSyncingConverter(),
                     new NullableConverter<BigInteger>(),
                     new EthBlockConverter(),
-                    new DateTimeOffsetConverter()
+                    new DateTimeOffsetConverter(),
+                    new EthWorkConverter(),
+                    //new RpcResponseConverter(),
+                    new RpcRequestConverter(),
+                    new RpcErrorConverter()
                 }
             };
         }

@@ -1,10 +1,7 @@
-﻿using Newtonsoft.Json;
-
-namespace Eth.Json
+﻿namespace Eth
 {
     public class RpcResponse<T> : RpcMessage
     {
-        [JsonProperty("result")]
         public T Result { get; set; }
     }
 }

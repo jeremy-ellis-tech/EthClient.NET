@@ -526,37 +526,20 @@ namespace Eth
         //    return EthHex.HexStringToByteArray(response.Result);
         //}
 
-        ///// <summary>
-        ///// Creates a filter object, based on filter options, to notify when the state changes (logs).
-        ///// To check if the state has changed, call EthGetFilterChangesAsync()
-        ///// </summary>
-        ///// <param name="filterOptions">The filter options</param>
-        ///// <returns>A filter id</returns>
-        //public async Task<BigInteger> EthNewFilterAsync(EthFilterOptions filterOptions)
-        //{
-        //    Ensure.EnsureParameterIsNotNull(filterOptions, "filterOptions");
+        /// <summary>
+        /// Creates a filter object, based on filter options, to notify when the state changes (logs).
+        /// To check if the state has changed, call EthGetFilterChangesAsync()
+        /// </summary>
+        /// <param name="filterOptions">The filter options</param>
+        /// <returns>A filter id</returns>
+        public async Task<BigInteger> EthNewFilterAsync(EthFilterOptions filterOptions)
+        {
+            Ensure.EnsureParameterIsNotNull(filterOptions, "filterOptions");
 
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_newFilter",
-        //        Parameters = new[]
-        //        {
-        //            new
-        //            {
-        //                fromBlock = filterOptions.FromBlock != null ? filterOptions.FromBlock.BlockNumber.HasValue ? EthHex.ToHexString(filterOptions.FromBlock.BlockNumber.Value) : filterOptions.FromBlock.Option.ToString().ToLowerInvariant() : null,
-        //                toBlock = filterOptions.ToBlock != null ? filterOptions.ToBlock.BlockNumber.HasValue ? EthHex.ToHexString(filterOptions.ToBlock.BlockNumber.Value) : filterOptions.ToBlock.Option.ToString().ToLowerInvariant() : null,
-        //                address = filterOptions.Address,
-        //                topics = filterOptions.Topics != null ? filterOptions.Topics : null
-        //            }
-        //        }
-        //    };
-
-        //    RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
-
-        //    return EthHex.HexStringToInt(response.Result);
-        //}
+            RpcRequest request = BuildRpcRequest("eth_newFilter", filterOptions);
+            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
+            return response.Result;
+        }
 
         /// <summary>
         /// Creates a filter in the node, to notify when a new block arrives. To check if the state has changed, call EthGetFilterChangesAsync().
@@ -642,26 +625,16 @@ namespace Eth
         //    return rpcResponse.Result;
         //}
 
-        ///// <summary>
-        ///// Returns the hash of the current block, the seedHash, and the boundary condition to be met 
-        ///// </summary>
-        ///// <returns>EthWork with current block hash, seed hash, and boundary condition</returns>
-        //public async Task<EthWork> EthGetWorkAsync()
-        //{
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_getWork",
-        //        Parameters = RpcRequest.EmptyParameters
-        //    };
-
-        //    RpcResponse<IList<string>> rpcResponse = await PostRpcRequestAsync<IList<string>>(request);
-
-        //    IList<string> result = rpcResponse.Result;
-
-        //    return new EthWork(EthHex.HexStringToByteArray(result[0]), EthHex.HexStringToByteArray(result[1]), EthHex.HexStringToByteArray(result[2]));
-        //}
+        /// <summary>
+        /// Returns the hash of the current block, the seedHash, and the boundary condition to be met 
+        /// </summary>
+        /// <returns>EthWork with current block hash, seed hash, and boundary condition</returns>
+        public async Task<EthWork> EthGetWorkAsync()
+        {
+            RpcRequest request = BuildRpcRequest("eth_getWork");
+            RpcResponse<EthWork> rpcResponse = await PostRpcRequestAsync<EthWork>(request);
+            return rpcResponse.Result;
+        }
 
         ///// <summary>
         ///// Used for submitting a proof-of-work solution.
