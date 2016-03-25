@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Eth
+namespace Eth.Rpc
 {
     public class EthCall
     {

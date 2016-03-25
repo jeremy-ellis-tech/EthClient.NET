@@ -1,4 +1,4 @@
-﻿namespace Eth
+﻿namespace Eth.Rpc
 {
     public abstract class RpcMessage
     {

@@ -1,4 +1,5 @@
-﻿using Eth.Utilities;
+﻿using Eth.Rpc;
+using Eth.Utilities;
 using Newtonsoft.Json;
 using System;
 

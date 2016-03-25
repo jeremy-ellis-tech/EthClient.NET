@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Eth.Rpc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Numerics;

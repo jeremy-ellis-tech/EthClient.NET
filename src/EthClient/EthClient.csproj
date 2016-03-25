@@ -33,22 +33,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Abi\AbiSerializer.cs" />
+    <Compile Include="Abi\ContractCallEncoder.cs" />
+    <Compile Include="Abi\AddressAbiValue.cs" />
     <Compile Include="Abi\BoolAbiValue.cs" />
-    <Compile Include="Abi\IAbiSerializer.cs" />
+    <Compile Include="Abi\IContractCallEncoder.cs" />
     <Compile Include="Abi\IAbiValue.cs" />
+    <Compile Include="Abi\StringAbiValue.cs" />
     <Compile Include="Abi\UInt256AbiValue.cs" />
-    <Compile Include="DefaultBlockOption.cs" />
-    <Compile Include="EthBlock.cs" />
-    <Compile Include="EthError.cs" />
-    <Compile Include="EthFilterOptions.cs" />
-    <Compile Include="EthLog.cs" />
-    <Compile Include="EthLogType.cs" />
-    <Compile Include="EthProofOfWork.cs" />
-    <Compile Include="EthSolidityContract.cs" />
-    <Compile Include="EthSyncing.cs" />
-    <Compile Include="EthTopic.cs" />
-    <Compile Include="EthTransactionReceipt.cs" />
+    <Compile Include="Abi\UInt32AbiValue.cs" />
+    <Compile Include="Abi\UInt8AbiValue.cs" />
+    <Compile Include="Rpc\DefaultBlockOption.cs" />
+    <Compile Include="Rpc\EthBlock.cs" />
+    <Compile Include="Rpc\EthError.cs" />
+    <Compile Include="Rpc\EthFilterOptions.cs" />
+    <Compile Include="Rpc\EthLog.cs" />
+    <Compile Include="Rpc\EthLogType.cs" />
+    <Compile Include="Rpc\EthProofOfWork.cs" />
+    <Compile Include="Rpc\EthSolidityContract.cs" />
+    <Compile Include="Rpc\EthSyncing.cs" />
+    <Compile Include="Rpc\EthTopic.cs" />
+    <Compile Include="Rpc\EthTransactionReceipt.cs" />
     <Compile Include="Json\Converters\BigIntegerConverter.cs" />
     <Compile Include="Json\Converters\ByteArrayConverter.cs" />
     <Compile Include="Json\Converters\DateTimeOffsetConverter.cs" />
@@ -69,21 +73,22 @@
     <Compile Include="Utilities\EthCurrencyConverter.cs" />
     <Compile Include="Utilities\EthCurrencyUnit.cs" />
     <Compile Include="Utilities\EthSpecs.cs" />
-    <Compile Include="EthException.cs" />
+    <Compile Include="Rpc\EthException.cs" />
     <Compile Include="Json\IJsonSerializer.cs" />
     <Compile Include="Json\JsonSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseClient.cs" />
-    <Compile Include="DefaultBlock.cs" />
-    <Compile Include="EthCall.cs" />
-    <Compile Include="EthWork.cs" />
-    <Compile Include="RpcError.cs" />
-    <Compile Include="RpcMessage.cs" />
-    <Compile Include="RpcRequest.cs" />
-    <Compile Include="RpcResponse.cs" />
-    <Compile Include="EthTransaction.cs" />
+    <Compile Include="Rpc\DefaultBlock.cs" />
+    <Compile Include="Rpc\EthCall.cs" />
+    <Compile Include="Rpc\EthWork.cs" />
+    <Compile Include="Rpc\RpcError.cs" />
+    <Compile Include="Rpc\RpcMessage.cs" />
+    <Compile Include="Rpc\RpcRequest.cs" />
+    <Compile Include="Rpc\RpcResponse.cs" />
+    <Compile Include="Rpc\EthTransaction.cs" />
     <Compile Include="Utilities\Ensure.cs" />
     <Compile Include="Utilities\EthHex.cs" />
+    <Compile Include="Abi\KeccakDigest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

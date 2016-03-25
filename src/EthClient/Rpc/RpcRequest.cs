@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Eth
+namespace Eth.Rpc
 {
     public class RpcRequest : RpcMessage
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Eth
+namespace Eth.Rpc
 {
     public class DefaultBlock
     {

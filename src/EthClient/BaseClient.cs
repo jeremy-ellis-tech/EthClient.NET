@@ -1,4 +1,5 @@
-﻿using Eth.Utilities;
+﻿using Eth.Rpc;
+using Eth.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

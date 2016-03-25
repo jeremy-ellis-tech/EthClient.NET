@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eth
+namespace Eth.Rpc
 {
     public class EthTopic
     {

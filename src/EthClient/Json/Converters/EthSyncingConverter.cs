@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Eth.Rpc;
+using Newtonsoft.Json;
 using System;
 
 namespace Eth.Json.Converters
@@ -7,7 +8,7 @@ namespace Eth.Json.Converters
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(Eth.EthSyncing);
+            return objectType == typeof(EthSyncing);
         }
 
         private static readonly string StartingBlockKey = "startingBlock";
@@ -21,7 +22,7 @@ namespace Eth.Json.Converters
                 case JsonToken.String:
                     return null;
                 case JsonToken.Boolean:
-                    return new Eth.EthSyncing();
+                    return new EthSyncing();
                 case JsonToken.Null:
                     return null;
                 default:
@@ -37,7 +38,7 @@ namespace Eth.Json.Converters
                 return;
             }
 
-            var obj = value as Eth.EthSyncing;
+            var obj = value as EthSyncing;
 
             if(obj == null) throw new JsonSerializationException("value is not of type EthSyncing");
 

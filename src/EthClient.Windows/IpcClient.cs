@@ -1,4 +1,5 @@
 ﻿using Eth.Json;
+using Eth.Rpc;
 using Eth.Utilities;
 using System;
 using System.Diagnostics;

@@ -1,11 +1,11 @@
 ﻿using Eth;
 using Eth.Json;
+using Eth.Rpc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using EthSyncing = Eth.EthSyncing;
 
 namespace EthClient.Test
 {

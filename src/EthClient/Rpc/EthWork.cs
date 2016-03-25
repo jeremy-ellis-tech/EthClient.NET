@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Eth
+namespace Eth.Rpc
 {
     public class EthWork
     {

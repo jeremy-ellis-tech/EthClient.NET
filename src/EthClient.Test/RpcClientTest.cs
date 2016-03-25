@@ -1,5 +1,6 @@
 ﻿using Eth;
 using Eth.Json;
+using Eth.Rpc;
 using EthClient.Test.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

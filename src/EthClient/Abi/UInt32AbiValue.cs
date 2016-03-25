@@ -1,16 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 
 namespace Eth.Abi
 {
-    public class UInt256AbiValue : IAbiValue
+    public class UInt32AbiValue : IAbiValue
     {
-        private readonly BigInteger _value;
+        private readonly uint _value;
 
-        public UInt256AbiValue(BigInteger value)
+        public UInt32AbiValue(uint value)
         {
             _value = value;
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "uint32";
+            }
         }
 
         private byte[] _head;
@@ -18,10 +26,10 @@ namespace Eth.Abi
         {
             get
             {
-                if(_head == null)
+                if (_head == null)
                 {
                     //BigInteger.ToByteArray() is little-endian order.
-                    byte[] value = _value.ToByteArray().Reverse().ToArray();
+                    byte[] value = BitConverter.IsLittleEndian ? BitConverter.GetBytes(_value).Reverse().ToArray() : BitConverter.GetBytes(_value);
 
                     //Pad to 32 bytes
                     int toPad = 32 - value.Length;
@@ -35,8 +43,6 @@ namespace Eth.Abi
                 return _head;
             }
         }
-
-        public string Name { get { return "uint256"; } }
 
         public byte[] Tail { get { return null; } }
     }
