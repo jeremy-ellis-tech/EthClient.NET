@@ -1,13 +1,17 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Eth.Json
+namespace Eth.Json.Converters
 {
-    public class RpcRequestConverter : JsonConverter
+    public class EthFilterOptionsConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(RpcRequest);
+            return objectType == typeof(EthFilterOptions);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
@@ -23,7 +27,7 @@ namespace Eth.Json
                 return;
             }
 
-            var obj = value as RpcRequest;
+            var obj = value as EthFilterOptions;
 
             if(obj == null)
             {
@@ -32,17 +36,17 @@ namespace Eth.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("id");
-            writer.WriteValue(obj.ID);
+            writer.WritePropertyName("fromBlock");
+            serializer.Serialize(writer, obj.FromBlock);
 
-            writer.WritePropertyName("jsonrpc");
-            writer.WriteValue(obj.JsonRpc);
+            writer.WritePropertyName("toBlock");
+            serializer.Serialize(writer, obj.ToBlock);
 
-            writer.WritePropertyName("method");
-            writer.WriteValue(obj.MethodName);
+            writer.WritePropertyName("address");
+            serializer.Serialize(writer, obj.Address);
 
-            writer.WritePropertyName("params");
-            serializer.Serialize(writer, obj.Parameters);
+            writer.WritePropertyName("topics");
+            serializer.Serialize(writer, obj.Topics);
 
             writer.WriteEndObject();
         }

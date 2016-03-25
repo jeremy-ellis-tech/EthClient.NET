@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Eth.Json.Converters;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -23,7 +24,6 @@ namespace Eth.Json
                     new EthBlockConverter(),
                     new DateTimeOffsetConverter(),
                     new EthWorkConverter(),
-                    //new RpcResponseConverter(),
                     new RpcRequestConverter(),
                     new RpcErrorConverter()
                 }

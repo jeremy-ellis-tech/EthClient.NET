@@ -1,5 +1,4 @@
-﻿using Eth.Json;
-using Eth.Utilities;
+﻿using Eth.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -457,74 +456,50 @@ namespace Eth
             return response.Result;
         }
 
-        ///// <summary>
-        ///// Returns compiled solidity code.
-        ///// </summary>
-        ///// <param name="sourceCode">The source code.</param>
-        ///// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
-        ///// <returns>The compiled source code</returns>
-        //public async Task<IList<SolidityContract>> EthCompileSolidityAsync(string sourceCode)
-        //{
-        //    Ensure.EnsureStringIsNotNullOrEmpty(sourceCode, "sourceCode");
+        /// <summary>
+        /// Returns compiled solidity code.
+        /// </summary>
+        /// <param name="sourceCode">The source code.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
+        /// <returns>The compiled source code</returns>
+        public async Task<IList<EthSolidityContract>> EthCompileSolidityAsync(string sourceCode)
+        {
+            Ensure.EnsureStringIsNotNullOrEmpty(sourceCode, "sourceCode");
 
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_compileSolidity",
-        //        Parameters = new[] { sourceCode }
-        //    };
+            RpcRequest request = BuildRpcRequest("eth_compileSolidity", sourceCode);
+            RpcResponse<IList<EthSolidityContract>> response = await PostRpcRequestAsync<IList<EthSolidityContract>>(request);
+            return response.Result;
+        }
 
-        //    RpcResponse<IDictionary<string, SolidityContract>> response = await PostRpcRequestAsync<IDictionary<string, SolidityContract>>(request);
+        /// <summary>
+        /// Returns compiled LLL code
+        /// </summary>
+        /// <param name="sourceCode">The source code</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
+        /// <returns>The compiled source code</returns>
+        public async Task<byte[]> EthCompileLllAsync(string sourceCode)
+        {
+            Ensure.EnsureStringIsNotNullOrEmpty(sourceCode, "sourceCode");
 
-        //    return response.Result.Select(x => { x.Value.ContractName = x.Key; return x.Value; }).ToList();
-        //}
+            RpcRequest request = BuildRpcRequest("eth_compileLLL", sourceCode);
+            RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
+            return response.Result;
+        }
 
-        ///// <summary>
-        ///// Returns compiled LLL code
-        ///// </summary>
-        ///// <param name="sourceCode">The source code</param>
-        ///// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
-        ///// <returns>The compiled source code</returns>
-        //public async Task<byte[]> EthCompileLllAsync(string sourceCode)
-        //{
-        //    Ensure.EnsureStringIsNotNullOrEmpty(sourceCode, "sourceCode");
+        /// <summary>
+        /// Returns compiled Serpent code
+        /// </summary>
+        /// <param name="sourceCode">The source code</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
+        /// <returns>The compiled source code</returns>
+        public async Task<byte[]> EthCompileSerpentAsync(string sourceCode)
+        {
+            Ensure.EnsureStringIsNotNullOrEmpty(sourceCode, "sourceCode");
 
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_compileLLL",
-        //        Parameters = new[] { sourceCode }
-        //    };
-
-        //    RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
-
-        //    return EthHex.HexStringToByteArray(response.Result);
-        //}
-
-        ///// <summary>
-        ///// Returns compiled Serpent code
-        ///// </summary>
-        ///// <param name="sourceCode">The source code</param>
-        ///// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
-        ///// <returns>The compiled source code</returns>
-        //public async Task<byte[]> EthCompileSerpentAsync(string sourceCode)
-        //{
-        //    Ensure.EnsureStringIsNotNullOrEmpty(sourceCode, "sourceCode");
-
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_compileSerpent",
-        //        Parameters = new[] { sourceCode }
-        //    };
-
-        //    RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
-
-        //    return EthHex.HexStringToByteArray(response.Result);
-        //}
+            RpcRequest request = BuildRpcRequest("eth_compileSerpent", sourceCode);
+            RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
+            return response.Result;
+        }
 
         /// <summary>
         /// Creates a filter object, based on filter options, to notify when the state changes (logs).
@@ -576,54 +551,29 @@ namespace Eth
             return rpcResponse.Result;
         }
 
-        ///// <summary>
-        ///// Polling method for a filter, which returns an array of logs which occurred since last poll.
-        ///// </summary>
-        ///// <param name="filterId"> the filter id.</param>
-        ///// <returns>Array of log objects, or an empty array if nothing has changed since last poll.</returns>
-        //public async Task<dynamic> EthGetFilterChangesAsync(BigInteger filterId)
-        //{
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_getFilterChanges",
-        //        Parameters = new object[] { filterId }
-        //    };
+        /// <summary>
+        /// Polling method for a filter, which returns an array of logs which occurred since last poll.
+        /// </summary>
+        /// <param name="filterId"> the filter id.</param>
+        /// <returns>Array of log objects, or an empty array if nothing has changed since last poll.</returns>
+        public async Task<IEnumerable<EthLog>> EthGetFilterChangesAsync(BigInteger filterId)
+        {
+            RpcRequest request = BuildRpcRequest("eth_getFilterChanges", filterId);
+            RpcResponse<IEnumerable<EthLog>> rpcResponse = await PostRpcRequestAsync<IEnumerable<EthLog>>(request);
+            return rpcResponse.Result;
+        }
 
-        //    RpcResponse<dynamic> rpcResponse = await PostRpcRequestAsync<dynamic>(request);
-
-        //    return rpcResponse.Result;
-        //}
-
-        ///// <summary>
-        ///// Returns an array of all logs matching a given filter object.
-        ///// </summary>
-        ///// <param name="filterOptions">the filter object</param>
-        ///// <returns>Array of log objects, or an empty array if nothing has changed since last poll</returns>
-        //public async Task<dynamic> EthGetLogsAsync(EthFilterOptions filterOptions)
-        //{
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_getLogs",
-        //        Parameters = new[]
-        //        {
-        //            new
-        //            {
-        //                fromBlock = filterOptions.FromBlock != null ? filterOptions.FromBlock.BlockNumber.HasValue ? EthHex.ToHexString(filterOptions.FromBlock.BlockNumber.Value) : filterOptions.FromBlock.Option.ToString().ToLowerInvariant() : null,
-        //                toBlock = filterOptions.ToBlock != null ? filterOptions.ToBlock.BlockNumber.HasValue ? EthHex.ToHexString(filterOptions.ToBlock.BlockNumber.Value) : filterOptions.ToBlock.Option.ToString().ToLowerInvariant() : null,
-        //                address = filterOptions.Address,
-        //                topics = filterOptions.Topics != null ? filterOptions.Topics : null
-        //            }
-        //        }
-        //    };
-
-        //    RpcResponse<dynamic> rpcResponse = await PostRpcRequestAsync<dynamic>(request);
-
-        //    return rpcResponse.Result;
-        //}
+        /// <summary>
+        /// Returns an array of all logs matching a given filter object.
+        /// </summary>
+        /// <param name="filterOptions">the filter object</param>
+        /// <returns>Array of log objects, or an empty array if nothing has changed since last poll</returns>
+        public async Task<EthLog> EthGetLogsAsync(EthFilterOptions filterOptions)
+        {
+            RpcRequest request = BuildRpcRequest("eth_getLogs", new { fromBlock = filterOptions.FromBlock, toBlock = filterOptions.ToBlock, address = filterOptions.Address, topics = filterOptions.Topics });
+            RpcResponse<EthLog> rpcResponse = await PostRpcRequestAsync<EthLog>(request);
+            return rpcResponse.Result;
+        }
 
         /// <summary>
         /// Returns the hash of the current block, the seedHash, and the boundary condition to be met 
@@ -636,25 +586,17 @@ namespace Eth
             return rpcResponse.Result;
         }
 
-        ///// <summary>
-        ///// Used for submitting a proof-of-work solution.
-        ///// </summary>
-        ///// <param name="proofOfWork">The proof-of-work solution</param>
-        ///// <returns>returns true if the provided solution is valid, otherwise false</returns>
-        //public async Task<bool> EthSubmitWorkAsync(ProofOfWork proofOfWork)
-        //{
-        //    RpcRequest request = new RpcRequest
-        //    {
-        //        ID = DefaultRequestId,
-        //        JsonRpc = DefaultJsonRpc,
-        //        MethodName = "eth_submitWork",
-        //        Parameters = new[] { proofOfWork.Nonce, proofOfWork.HeaderPowHash, proofOfWork.MixDigest }
-        //    };
-
-        //    RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
-
-        //    return response.Result;
-        //}
+        /// <summary>
+        /// Used for submitting a proof-of-work solution.
+        /// </summary>
+        /// <param name="proofOfWork">The proof-of-work solution</param>
+        /// <returns>returns true if the provided solution is valid, otherwise false</returns>
+        public async Task<bool> EthSubmitWorkAsync(EthProofOfWork proofOfWork)
+        {
+            RpcRequest request = BuildRpcRequest("eth_submitWork", proofOfWork.Nonce, proofOfWork.PowHash, proofOfWork.MixDigest);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
+            return response.Result;
+        }
 
         /// <summary>
         /// Used for submitting mining hashrate.

@@ -1,23 +1,26 @@
-﻿using Newtonsoft.Json;
+﻿using Eth.Utilities;
+using Newtonsoft.Json;
 using System;
 
-namespace Eth.Json
+namespace Eth.Json.Converters
 {
-    public class NullableConverter<T> : JsonConverter where T : struct
+    public class ByteArrayConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(T?);
+            return objectType == typeof(byte[]);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             switch (reader.TokenType)
             {
+                case JsonToken.String:
+                    return EthHex.HexStringToByteArray(reader.Value.ToString());
                 case JsonToken.Null:
                     return null;
                 default:
-                    return serializer.Deserialize<T>(reader);
+                    throw new NotImplementedException();
             }
         }
 
@@ -29,14 +32,14 @@ namespace Eth.Json
                 return;
             }
 
-            var obj = value as T?;
+            byte[] arr = value as byte[];
 
-            if(obj == null)
+            if(arr == null)
             {
                 throw new ArgumentOutOfRangeException("value");
             }
 
-            serializer.Serialize(writer, obj);
+            writer.WriteValue(EthHex.ToHexString(arr));
         }
     }
 }

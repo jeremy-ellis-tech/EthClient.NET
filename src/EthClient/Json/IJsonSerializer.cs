@@ -1,4 +1,4 @@
-﻿namespace Eth
+﻿namespace Eth.Json
 {
     public interface IJsonSerializer
     {

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Numerics;
 
-namespace Eth.Json
+namespace Eth.Json.Converters
 {
     public class BigIntegerConverter : JsonConverter
     {

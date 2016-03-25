@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Eth.Json
+namespace Eth.Json.Converters
 {
     public class DefaultBlockConverter : JsonConverter
     {

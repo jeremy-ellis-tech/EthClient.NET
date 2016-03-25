@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace Eth.Json
+namespace Eth.Json.Converters
 {
     public class EthBlockConverter : JsonConverter
     {

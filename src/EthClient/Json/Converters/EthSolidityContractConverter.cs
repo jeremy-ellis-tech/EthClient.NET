@@ -4,15 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Reflection;
 
-namespace Eth.Json
+namespace Eth.Json.Converters
 {
-    public class RpcMessageConverter : JsonConverter
+    public class EthSolidityContractConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(RpcMessage).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
+            return objectType == typeof(EthSolidityContract);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)

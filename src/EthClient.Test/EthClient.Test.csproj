@@ -54,7 +54,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="HexTest.cs" />
+    <Compile Include="AbiSerializerTest.cs" />
+    <Compile Include="EthCurrencyConverterTest.cs" />
+    <Compile Include="EthHexTest.cs" />
     <Compile Include="Mocks\MockHttpMessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RpcClientTest.cs" />

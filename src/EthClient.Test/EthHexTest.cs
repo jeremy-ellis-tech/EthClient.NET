@@ -7,7 +7,7 @@ using System.Linq;
 namespace EthClient.Test
 {
     [TestClass]
-    public class HexTest
+    public class EthHexTest
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]

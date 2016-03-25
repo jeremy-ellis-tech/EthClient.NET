@@ -1,41 +1,39 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Eth.Json
+namespace Eth.Json.Converters
 {
-    public class EthLogConverter : JsonConverter
+    public class EthTransactionConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(EthLog);
+            return objectType == typeof(EthTransaction);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
-            EthLog ethLog = new EthLog();
+            EthTransaction ethTransaction = new EthTransaction();
             int startingDepth = reader.Depth;
 
             while (!(reader.TokenType == JsonToken.EndObject && startingDepth == reader.Depth))
             {
                 reader.Read();
 
-                if(reader.TokenType == JsonToken.PropertyName)
+                if (reader.TokenType == JsonToken.PropertyName)
                 {
                     string propertyName = reader.Value.ToString();
 
-                    if(String.Equals(propertyName, "type"))
+                    if (String.Equals(propertyName, "hash"))
                     {
                         reader.Read();
-                        serializer.Deserialize<EthLogType>(reader);
+                        serializer.Deserialize<byte[]>(reader);
                     }
-                    else if (String.Equals(propertyName, "logIndex"))
-                    {
-                        reader.Read();
-                        serializer.Deserialize<BigInteger>(reader);
-                    }
-                    else if(String.Equals(propertyName, "blockNumer"))
+                    else if (String.Equals(propertyName, "nonce"))
                     {
                         reader.Read();
                         serializer.Deserialize<BigInteger>(reader);
@@ -45,35 +43,50 @@ namespace Eth.Json
                         reader.Read();
                         serializer.Deserialize<byte[]>(reader);
                     }
-                    else if (String.Equals(propertyName, "transactionHash"))
+                    else if (String.Equals(propertyName, "blockNumber"))
                     {
                         reader.Read();
-                        serializer.Deserialize<byte[]>(reader);
+                        serializer.Deserialize<BigInteger>(reader);
                     }
                     else if (String.Equals(propertyName, "transactionIndex"))
                     {
                         reader.Read();
                         serializer.Deserialize<BigInteger>(reader);
                     }
-                    else if (String.Equals(propertyName, "address"))
+                    else if (String.Equals(propertyName, "from"))
                     {
                         reader.Read();
                         serializer.Deserialize<byte[]>(reader);
                     }
-                    else if (String.Equals(propertyName, "data"))
+                    else if (String.Equals(propertyName, "to"))
                     {
                         reader.Read();
                         serializer.Deserialize<byte[]>(reader);
                     }
-                    else if (String.Equals(propertyName, "topics"))
+                    else if (String.Equals(propertyName, "value"))
                     {
                         reader.Read();
-                        serializer.Deserialize<IEnumerable<byte[]>>(reader);
+                        serializer.Deserialize<BigInteger>(reader);
+                    }
+                    else if (String.Equals(propertyName, "gasPrice"))
+                    {
+                        reader.Read();
+                        serializer.Deserialize<BigInteger>(reader);
+                    }
+                    else if (String.Equals(propertyName, "gas"))
+                    {
+                        reader.Read();
+                        serializer.Deserialize<BigInteger>(reader);
+                    }
+                    else if (String.Equals(propertyName, "input"))
+                    {
+                        reader.Read();
+                        serializer.Deserialize<byte[]>(reader);
                     }
                 }
             }
 
-            return ethLog;
+            return ethTransaction;
         }
 
         public override void WriteJson(JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)

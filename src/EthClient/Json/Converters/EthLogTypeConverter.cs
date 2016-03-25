@@ -1,24 +1,23 @@
-﻿using Eth.Utilities;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 
-namespace Eth.Json
+namespace Eth.Json.Converters
 {
-    public class ByteArrayConverter : JsonConverter
+    public class EthLogTypeConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(byte[]);
+            return objectType == typeof(EthLogType);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
-            switch (reader.TokenType)
+            switch (reader.Value.ToString())
             {
-                case JsonToken.String:
-                    return EthHex.HexStringToByteArray(reader.Value.ToString());
-                case JsonToken.Null:
-                    return null;
+                case "pending":
+                    return EthLogType.Pending;
+                case "mined":
+                    return EthLogType.Mined;
                 default:
                     throw new NotImplementedException();
             }
@@ -32,14 +31,8 @@ namespace Eth.Json
                 return;
             }
 
-            byte[] arr = value as byte[];
-
-            if(arr == null)
-            {
-                throw new ArgumentOutOfRangeException("value");
-            }
-
-            writer.WriteValue(EthHex.ToHexString(arr));
+            EthLogType type = (EthLogType)value;
+            writer.WriteValue(type.ToString().ToLowerInvariant());
         }
     }
 }

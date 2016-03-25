@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eth.Json
+namespace Eth.Json.Converters
 {
     public class RpcErrorConverter : JsonConverter
     {

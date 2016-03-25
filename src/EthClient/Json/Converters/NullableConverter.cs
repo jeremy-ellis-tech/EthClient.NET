@@ -1,25 +1,23 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Eth.Json
+namespace Eth.Json.Converters
 {
-    public class EthLogTypeConverter : JsonConverter
+    public class NullableConverter<T> : JsonConverter where T : struct
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(EthLogType);
+            return objectType == typeof(T?);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
-            switch (reader.Value.ToString())
+            switch (reader.TokenType)
             {
-                case "pending":
-                    return EthLogType.Pending;
-                case "mined":
-                    return EthLogType.Mined;
+                case JsonToken.Null:
+                    return null;
                 default:
-                    throw new NotImplementedException();
+                    return serializer.Deserialize<T>(reader);
             }
         }
 
@@ -31,8 +29,14 @@ namespace Eth.Json
                 return;
             }
 
-            EthLogType type = (EthLogType)value;
-            writer.WriteValue(type.ToString().ToLowerInvariant());
+            var obj = value as T?;
+
+            if(obj == null)
+            {
+                throw new ArgumentOutOfRangeException("value");
+            }
+
+            serializer.Serialize(writer, obj);
         }
     }
 }
