@@ -25,7 +25,6 @@ namespace Eth.Json
                     new DateTimeOffsetConverter(),
                     new EthWorkConverter(),
                     new RpcRequestConverter(),
-                    new RpcErrorConverter()
                 }
             };
         }

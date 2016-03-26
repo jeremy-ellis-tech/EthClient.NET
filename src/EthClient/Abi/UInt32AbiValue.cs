@@ -3,14 +3,14 @@ using System.Numerics;
 
 namespace Eth.Abi
 {
-    public class UInt256AbiValue : IAbiValue
+    public class UInt32AbiValue : IAbiValue
     {
-        public UInt256AbiValue(BigInteger value)
+        public UInt32AbiValue(BigInteger value)
         {
             _value = value;
         }
 
-        public UInt256AbiValue()
+        public UInt32AbiValue()
         {
 
         }
@@ -20,7 +20,7 @@ namespace Eth.Abi
         {
             get
             {
-                if(_head == null)
+                if (_head == null)
                 {
                     byte[] value = _value.Value.ToByteArray().Reverse().ToArray();
                     int toPad = 32 - value.Length;
@@ -47,7 +47,7 @@ namespace Eth.Abi
         {
             get
             {
-                return "uint256";
+                return "uint32";
             }
         }
 
@@ -57,6 +57,7 @@ namespace Eth.Abi
             {
                 return null;
             }
+
             set
             {
                 return;
@@ -68,7 +69,7 @@ namespace Eth.Abi
         {
             get
             {
-                if(_value == null)
+                if (_value == null)
                 {
                     _value = new BigInteger(_head.Reverse().ToArray());
                 }

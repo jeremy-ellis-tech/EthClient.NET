@@ -25,13 +25,7 @@ namespace EthClient.Test
 
             try
             {
-                var rpcResponse = rpcClient.PostRpcRequestAsync<string>(new RpcRequest
-                {
-                    ID = 0,
-                    JsonRpc = "2.0",
-                    MethodName = "eth_getWork",
-                    Parameters = null
-                }).Result;
+                var rpcResponse = rpcClient.EthGetWorkAsync().Result;
             }
             catch (AggregateException ex)
             {

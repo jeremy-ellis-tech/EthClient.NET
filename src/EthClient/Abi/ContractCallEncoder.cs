@@ -7,33 +7,23 @@ namespace Eth.Abi
 {
     public class ContractCallEncoder : IContractCallEncoder
     {
-        public IEnumerable<IAbiValue> Decode(byte[] data, params AbiReturnType[] returnTypes)
+        private readonly IKeccak _keccak;
+        public ContractCallEncoder(IKeccak keccak)
+        {
+            _keccak = keccak;
+        }
+
+        public void Decode(byte[] data, params IAbiValue[] returns)
         {
             int offset = 0;
-            foreach (var returnType in returnTypes)
+            foreach (var ret in returns)
             {
-                byte[] head = data.Skip(offset).Take(32).ToArray();
+                ret.Head = data.Skip(offset).Take(32).ToArray();
 
-                IAbiValue value;
-                switch (returnType)
-                {
-                    case AbiReturnType.UInt256:
-                        value = new UInt256AbiValue();
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
-
-                if (value.IsDynamic)
+                if(ret.IsDynamic)
                 {
                     throw new NotImplementedException();
                 }
-                else
-                {
-                    value.Head = head;
-                }
-
-                yield return value;
 
                 offset += 32;
             }
@@ -41,19 +31,14 @@ namespace Eth.Abi
 
         public byte[] Encode(string functionName, params IAbiValue[] parameters)
         {
-            KeccakDigest kd = new KeccakDigest();
-            byte[] input = Encoding.UTF8.GetBytes(String.Concat(functionName, "(", String.Join(",", parameters.Select(x => x.Name)), ")"));
-            kd.BlockUpdate(input, 0, input.Length);
-            byte[] functionSelector = new byte[kd.GetDigestSize()];
-            kd.DoFinal(functionSelector, 0);
-
             List<byte> serialzed = new List<byte>();
 
-            serialzed.AddRange(functionSelector.Take(4));
+            string paramPart = parameters == null || parameters.Count() == 0 ? String.Empty : String.Join(",", parameters.Select(x => x.Name));
+            serialzed.AddRange(_keccak.GetDigest(Encoding.UTF8.GetBytes(String.Concat(functionName, "(", paramPart, ")"))).Take(4).ToArray());
 
             foreach (var p in parameters)
             {
-                if (p.Tail != null && p.Tail.Length != 0)
+                if(p.IsDynamic)
                 {
                     throw new NotImplementedException("Dynamic types not implemented yet");
                 }

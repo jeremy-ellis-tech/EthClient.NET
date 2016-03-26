@@ -16,7 +16,8 @@ namespace Eth
     {
         private static string DefaultJsonRpc = "2.0";
         private static int DefaultRequestId = 0;
-        private readonly IContractCallEncoder _defaultEncoder = new ContractCallEncoder();
+
+        private readonly IContractCallEncoder _defaultEncoder = new ContractCallEncoder(new Keccak());
 
         private static RpcRequest BuildRpcRequest(string methodName, params object[] parameters)
         {

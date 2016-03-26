@@ -1,16 +1,16 @@
-﻿using System.Linq;
-using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Eth.Abi
 {
-    public class UInt256AbiValue : IAbiValue
+    public class BoolAbiValue : IAbiValue
     {
-        public UInt256AbiValue(BigInteger value)
+        public BoolAbiValue(bool value)
         {
             _value = value;
         }
 
-        public UInt256AbiValue()
+        public BoolAbiValue()
         {
 
         }
@@ -22,13 +22,15 @@ namespace Eth.Abi
             {
                 if(_head == null)
                 {
-                    byte[] value = _value.Value.ToByteArray().Reverse().ToArray();
-                    int toPad = 32 - value.Length;
-                    _head = Enumerable.Repeat<byte>(0x00, toPad).Concat(value).ToArray();
+                    IList<byte> padding = Enumerable.Repeat<byte>(0x00, 31).ToList();
+                    byte value = _value.Value ? (byte)0x01 : (byte)0x00;
+                    padding.Add(value);
+                    _head = padding.ToArray();
                 }
 
                 return _head;
             }
+
             set
             {
                 _head = value;
@@ -47,7 +49,7 @@ namespace Eth.Abi
         {
             get
             {
-                return "uint256";
+                return "bool";
             }
         }
 
@@ -57,20 +59,21 @@ namespace Eth.Abi
             {
                 return null;
             }
+
             set
             {
                 return;
             }
         }
 
-        private BigInteger? _value;
-        public BigInteger Value
+        private bool? _value;
+        public bool Value
         {
             get
             {
                 if(_value == null)
                 {
-                    _value = new BigInteger(_head.Reverse().ToArray());
+                    _value = Head.Last() == 0x01;
                 }
 
                 return _value.Value;

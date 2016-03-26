@@ -2,7 +2,7 @@
 {
     public class EthError
     {
-        public int ErrorCode { get; set; }
+        public int Code { get; set; }
         public string Message { get; set; }
     }
 }

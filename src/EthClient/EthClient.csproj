@@ -33,11 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Abi\AbiReturnType.cs" />
+    <Compile Include="Abi\BoolAbiValue.cs" />
     <Compile Include="Abi\ContractCallEncoder.cs" />
     <Compile Include="Abi\IContractCallEncoder.cs" />
     <Compile Include="Abi\IAbiValue.cs" />
+    <Compile Include="Abi\IKeccak.cs" />
     <Compile Include="Abi\UInt256AbiValue.cs" />
+    <Compile Include="Abi\UInt32AbiValue.cs" />
     <Compile Include="EthContract.cs" />
     <Compile Include="Rpc\DefaultBlockOption.cs" />
     <Compile Include="Rpc\EthBlock.cs" />
@@ -63,7 +65,6 @@
     <Compile Include="Json\Converters\EthTransactionConverter.cs" />
     <Compile Include="Json\Converters\EthWorkConverter.cs" />
     <Compile Include="Json\Converters\NullableConverter.cs" />
-    <Compile Include="Json\Converters\RpcErrorConverter.cs" />
     <Compile Include="Json\Converters\RpcRequestConverter.cs" />
     <Compile Include="Json\Converters\EthSolidityContractConverter.cs" />
     <Compile Include="RpcClient.cs" />
@@ -85,7 +86,7 @@
     <Compile Include="Rpc\EthTransaction.cs" />
     <Compile Include="Utilities\Ensure.cs" />
     <Compile Include="Utilities\EthHex.cs" />
-    <Compile Include="Abi\KeccakDigest.cs" />
+    <Compile Include="Abi\Keccak.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

@@ -3,6 +3,27 @@
 namespace Eth.Abi
 {
     /// <summary>
+    /// Adapter class for KeccakDigest
+    /// </summary>
+    public class Keccak : IKeccak
+    {
+        private readonly KeccakDigest _keccakDigest;
+        public Keccak()
+        {
+            _keccakDigest = new KeccakDigest();
+        }
+
+        public byte[] GetDigest(byte[] data)
+        {
+            _keccakDigest.BlockUpdate(data, 0, data.Length);
+            byte[] digest = new byte[_keccakDigest.GetDigestSize()];
+            _keccakDigest.DoFinal(digest, 0);
+            _keccakDigest.Reset();
+            return digest;
+        }
+    }
+
+    /// <summary>
     /// Copyright (c) 2000 - 2015 The Legion of the Bouncy Castle Inc. (http://www.bouncycastle.org)
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -20,7 +41,7 @@ namespace Eth.Abi
     /// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
     /// OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     /// </summary>
-    public class KeccakDigest
+    internal class KeccakDigest
     {
         private static readonly ulong[] KeccakRoundConstants = KeccakInitializeRoundConstants();
 

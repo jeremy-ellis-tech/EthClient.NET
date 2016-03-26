@@ -83,7 +83,7 @@ namespace Eth
 
             if (rpcError.Error != null)
             {
-                throw new EthException(rpcError.Error.ErrorCode, rpcError.Error.Message);
+                throw new EthException(rpcError.Error.Code, rpcError.Error.Message);
             }
 
             return _jsonSerializer.Deserialize<RpcResponse<T>>(jsonResponse);

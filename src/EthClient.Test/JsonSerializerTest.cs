@@ -182,14 +182,5 @@ namespace EthClient.Test
             //actual = _serializer.Deserialize<EthSyncing>(json);
             //Assert.IsTrue(Equals(expected, actual));
         }
-
-        [TestMethod]
-        public void EthWorkShouldBeDeserializedCorrectly()
-        {
-            string json = "{\"jsonrpc\":\"2.0\",\"id\":0,\"result\":[\"0x6a992e2ed05b076ce7e285599540bea98a192f6fb95932bad8f5bd3e6924a0b8\",\"0xc6320e3c1c3456002aa6ccc5b60cf5bf054d7e9392712f8b7764869abe630035\",\"0x000029ea0a9508bff47f86989a59532801509fa4fcee45a3a030f9979d63d94a\"]}\n";
-            RpcResponse<EthWork> actual = _serializer.Deserialize<RpcResponse<EthWork>>(json);
-            EthWork expected = new EthWork { };
-            Assert.IsTrue(Equals(expected, actual.Result));
-        }
     }
 }

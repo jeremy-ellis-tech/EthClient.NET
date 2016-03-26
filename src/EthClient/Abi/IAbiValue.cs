@@ -8,7 +8,7 @@
         //See https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#formal-specification-of-the-encoding
         byte[] Head { get; set; }
         byte[] Tail { get; set; }
+
         bool IsDynamic { get; }
-        object Value { get; }
     }
 }

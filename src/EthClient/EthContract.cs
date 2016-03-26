@@ -1,6 +1,5 @@
 ﻿using Eth.Abi;
 using Eth.Rpc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -22,14 +21,15 @@ namespace Eth
         }
 
         /// <summary>
-        /// Call a contract's function without making a trasaction.
-        /// The function must be declared as <code>constant</code>
-        /// and can therefore not change the contract's state.
+        /// Call a contract's function without sending a transaction
+        /// This function must be declared <code>constant</code>
+        /// and cannot change the contract's state
         /// </summary>
-        /// <param name="functionName">The function name</param>
-        /// <param name="parameters">The function parameters</param>
-        /// <returns>The return value of the function call</returns>
-        public async Task<IEnumerable<IAbiValue>> CallAsync(string functionName, IEnumerable<IAbiValue> parameters, IEnumerable<AbiReturnType> returnTypes)
+        /// <param name="functionName">The name of the function</param>
+        /// <param name="parameters">An enumerable of abi values for function parameters</param>
+        /// <param name="returns">An enumerable of return values. This will be populated with decoded values</param>
+        /// <returns></returns>
+        public async Task CallAsync(string functionName, IEnumerable<IAbiValue> parameters, IEnumerable<IAbiValue> returns)
         {
             EthCall call = new EthCall
             {
@@ -39,23 +39,20 @@ namespace Eth
 
             byte[] data = await _client.EthCallAsync(call, DefaultBlock.Latest);
 
-            return _encoder.Decode(data, returnTypes.ToArray());
+            _encoder.Decode(data, returns.ToArray());
         }
 
         /// <summary>
-        /// Transact with a contract's function.
+        /// Call a contract's function with a transaction.
         /// </summary>
-        /// <param name="functionName">The function name that changes the contract's state</param>
+        /// <param name="functionName">The name of the function</param>
         /// <param name="parameters">The function parameters</param>
-        /// <param name="from">The account address to send the transaction from</param>
-        /// <param name="gas">The gas limit (optional)</param>
-        /// <param name="gasPrice">The gas price (optional)</param>
-        /// <param name="value">The value to send with the transaction (optional)</param>
-        /// <returns>The return value of the fuction</returns>
-        public async Task<byte[]> TransactAsync(string functionName, IEnumerable<IAbiValue> parameters, byte[] from, BigInteger? gas = null, BigInteger? gasPrice = null, BigInteger? value = null)
+        /// <param name="from">The account address to send the transaction from (must be unlocked before sending)</param>
+        /// <param name="gas">gas limit (optional)</param>
+        /// <param name="gasPrice">gas price (optional)</param>
+        /// <param name="value">value (optional)</param>
+        public async Task TransactAsync(string functionName, IEnumerable<IAbiValue> parameters, byte[] from, BigInteger? gas = null, BigInteger? gasPrice = null, BigInteger? value = null)
         {
-            throw new NotImplementedException();
-
             EthTransaction transaction = new EthTransaction
             {
                 To = _address,
@@ -74,8 +71,6 @@ namespace Eth
             {
                 receipt = await _client.EthGetTransactionReceiptAsync(transactionHash);
             }
-
-            return transactionHash; //TODO
         }
     }
 }
