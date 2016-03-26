@@ -29,15 +29,17 @@ namespace Eth
         /// <param name="functionName">The function name</param>
         /// <param name="parameters">The function parameters</param>
         /// <returns>The return value of the function call</returns>
-        public async Task<byte[]> CallAsync(string functionName, params IAbiValue[] parameters)
+        public async Task<IEnumerable<IAbiValue>> CallAsync(string functionName, IEnumerable<IAbiValue> parameters, IEnumerable<AbiReturnType> returnTypes)
         {
             EthCall call = new EthCall
             {
                 To = _address,
-                Data = _encoder.Encode(functionName, parameters)
+                Data = _encoder.Encode(functionName, parameters.ToArray())
             };
 
-            return await _client.EthCallAsync(call, DefaultBlock.Latest);
+            byte[] data = await _client.EthCallAsync(call, DefaultBlock.Latest);
+
+            return _encoder.Decode(data, returnTypes.ToArray());
         }
 
         /// <summary>

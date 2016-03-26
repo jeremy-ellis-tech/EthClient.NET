@@ -33,15 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Abi\AbiReturnType.cs" />
     <Compile Include="Abi\ContractCallEncoder.cs" />
-    <Compile Include="Abi\AddressAbiValue.cs" />
-    <Compile Include="Abi\BoolAbiValue.cs" />
     <Compile Include="Abi\IContractCallEncoder.cs" />
     <Compile Include="Abi\IAbiValue.cs" />
-    <Compile Include="Abi\StringAbiValue.cs" />
     <Compile Include="Abi\UInt256AbiValue.cs" />
-    <Compile Include="Abi\UInt32AbiValue.cs" />
-    <Compile Include="Abi\UInt8AbiValue.cs" />
     <Compile Include="EthContract.cs" />
     <Compile Include="Rpc\DefaultBlockOption.cs" />
     <Compile Include="Rpc\EthBlock.cs" />

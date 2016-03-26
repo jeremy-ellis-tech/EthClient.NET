@@ -16,14 +16,14 @@ namespace EthClient.Test
             _encoder = new ContractCallEncoder();
         }
 
-        [TestMethod]
-        public void ShouldEncodeCallCorrectly()
-        {
-            //Expected value taken from https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#examples
-            byte[] expected = EthHex.HexStringToByteArray("0xcdcd77c000000000000000000000000000000000000000000000000000000000000000450000000000000000000000000000000000000000000000000000000000000001");
-            byte[] actual = _encoder.Encode("baz", new UInt32AbiValue(69), new BoolAbiValue(true));
+        //[TestMethod]
+        //public void ShouldEncodeCallCorrectly()
+        //{
+        //    //Expected value taken from https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#examples
+        //    byte[] expected = EthHex.HexStringToByteArray("0xcdcd77c000000000000000000000000000000000000000000000000000000000000000450000000000000000000000000000000000000000000000000000000000000001");
+        //    byte[] actual = _encoder.Encode("baz", new UInt32AbiValue(69), new BoolAbiValue(true));
 
-            Assert.IsTrue(actual.SequenceEqual(expected));
-        }
+        //    Assert.IsTrue(actual.SequenceEqual(expected));
+        //}
     }
 }

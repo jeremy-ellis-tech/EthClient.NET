@@ -1,5 +1,4 @@
-﻿using Eth.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +7,36 @@ namespace Eth.Abi
 {
     public class ContractCallEncoder : IContractCallEncoder
     {
-        public IEnumerable<IAbiValue> Decode(byte[] data)
+        public IEnumerable<IAbiValue> Decode(byte[] data, params AbiReturnType[] returnTypes)
         {
-            throw new NotImplementedException();
+            int offset = 0;
+            foreach (var returnType in returnTypes)
+            {
+                byte[] head = data.Skip(offset).Take(32).ToArray();
+
+                IAbiValue value;
+                switch (returnType)
+                {
+                    case AbiReturnType.UInt256:
+                        value = new UInt256AbiValue();
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+
+                if (value.IsDynamic)
+                {
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    value.Head = head;
+                }
+
+                yield return value;
+
+                offset += 32;
+            }
         }
 
         public byte[] Encode(string functionName, params IAbiValue[] parameters)

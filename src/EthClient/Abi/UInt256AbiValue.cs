@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Numerics;
 
@@ -6,11 +6,14 @@ namespace Eth.Abi
 {
     public class UInt256AbiValue : IAbiValue
     {
-        private readonly BigInteger _value;
-
         public UInt256AbiValue(BigInteger value)
         {
             _value = value;
+        }
+
+        public UInt256AbiValue()
+        {
+
         }
 
         private byte[] _head;
@@ -20,24 +23,59 @@ namespace Eth.Abi
             {
                 if(_head == null)
                 {
-                    //BigInteger.ToByteArray() is little-endian order.
-                    byte[] value = _value.ToByteArray().Reverse().ToArray();
-
-                    //Pad to 32 bytes
+                    byte[] value = _value.Value.ToByteArray().Reverse().ToArray();
                     int toPad = 32 - value.Length;
-                    List<byte> b = new List<byte>();
-                    b.AddRange(Enumerable.Repeat<byte>(0x0, toPad));
-                    b.AddRange(value);
-
-                    _head = b.ToArray();
+                    _head = Enumerable.Repeat<byte>(0x00, toPad).Concat(value).ToArray();
                 }
 
                 return _head;
             }
+            set
+            {
+                _head = value;
+            }
         }
 
-        public string Name { get { return "uint256"; } }
+        public bool IsDynamic
+        {
+            get
+            {
+                return false;
+            }
+        }
 
-        public byte[] Tail { get { return null; } }
+        public string Name
+        {
+            get
+            {
+                return "uint256";
+            }
+        }
+
+        public byte[] Tail
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private BigInteger? _value;
+        public object Value
+        {
+            get
+            {
+                if(_value == null)
+                {
+                    _value = new BigInteger(Head.Reverse().ToArray());
+                }
+
+                return _value;
+            }
+        }
     }
 }
