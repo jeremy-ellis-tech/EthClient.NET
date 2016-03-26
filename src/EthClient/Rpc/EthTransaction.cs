@@ -5,18 +5,18 @@ namespace Eth.Rpc
 {
     public class EthTransaction
     {
-        public byte[] From { get; private set; }
+        public byte[] From { get; set; }
 
-        public byte[] To { get; private set; }
+        public byte[] To { get; set; }
 
-        public BigInteger? Gas { get; private set; }
+        public BigInteger? Gas { get; set; }
 
-        public BigInteger? GasPrice { get; private set; }
+        public BigInteger? GasPrice { get; set; }
 
-        public BigInteger? Value { get; private set; }
+        public BigInteger? Value { get; set; }
 
-        public byte[] Data { get; private set; }
+        public byte[] Data { get; set; }
 
-        public BigInteger? Nonce { get; private set; }
+        public BigInteger? Nonce { get; set; }
     }
 }

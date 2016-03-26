@@ -42,6 +42,7 @@
     <Compile Include="Abi\UInt256AbiValue.cs" />
     <Compile Include="Abi\UInt32AbiValue.cs" />
     <Compile Include="Abi\UInt8AbiValue.cs" />
+    <Compile Include="EthContract.cs" />
     <Compile Include="Rpc\DefaultBlockOption.cs" />
     <Compile Include="Rpc\EthBlock.cs" />
     <Compile Include="Rpc\EthError.cs" />

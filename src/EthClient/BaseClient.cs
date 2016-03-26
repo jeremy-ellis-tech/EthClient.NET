@@ -1,4 +1,5 @@
-﻿using Eth.Rpc;
+﻿using Eth.Abi;
+using Eth.Rpc;
 using Eth.Utilities;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace Eth
     {
         private static string DefaultJsonRpc = "2.0";
         private static int DefaultRequestId = 0;
+        private readonly IContractCallEncoder _defaultEncoder = new ContractCallEncoder();
 
         private static RpcRequest BuildRpcRequest(string methodName, params object[] parameters)
         {
@@ -28,6 +30,16 @@ namespace Eth
         }
 
         public abstract Task<RpcResponse<T>> PostRpcRequestAsync<T>(RpcRequest request);
+
+        /// <summary>
+        /// Get a contract located at an address on the block-chain.
+        /// </summary>
+        /// <param name="address">The contract's address</param>
+        /// <returns>An ethereum contract</returns>
+        public EthContract GetContractAt(byte[] address)
+        {
+            return new EthContract(address, this, _defaultEncoder);
+        }
 
         /// <summary>
         /// Returns the current client version.
