@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace Eth.Rpc
 {
@@ -54,7 +53,7 @@ namespace Eth.Rpc
 
         public override string ToString()
         {
-            return String.Format("EthSyncing - IsSyncing: {0}", IsSynching);
+            return IsSynching.ToString();
         }
     }
 }

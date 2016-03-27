@@ -1,6 +1,7 @@
 ﻿using Eth.Rpc;
 using Newtonsoft.Json;
 using System;
+using System.Numerics;
 
 namespace Eth.Json.Converters
 {
@@ -17,16 +18,45 @@ namespace Eth.Json.Converters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
-            switch (reader.TokenType)
+            if(reader.TokenType == JsonToken.Boolean)
             {
-                case JsonToken.String:
-                    return null;
-                case JsonToken.Boolean:
-                    return new EthSyncing();
-                case JsonToken.Null:
-                    return null;
-                default:
-                    throw new NotImplementedException();
+                return new EthSyncing(false);
+            }
+            else
+            {
+                int depth = reader.Depth;
+
+                BigInteger startingBlock;
+                BigInteger currentBlock;
+                BigInteger highestBlock;
+
+                while (!(reader.TokenType == JsonToken.EndObject && reader.Depth == depth))
+                {
+                    reader.Read();
+
+                    if(reader.TokenType == JsonToken.PropertyName)
+                    {
+                        string propertyName = reader.Value.ToString();
+
+                        if(String.Equals(propertyName, StartingBlockKey))
+                        {
+                            reader.Read();
+                            startingBlock = serializer.Deserialize<BigInteger>(reader);
+                        }
+                        else if (String.Equals(propertyName, CurrentBlockKey))
+                        {
+                            reader.Read();
+                            currentBlock = serializer.Deserialize<BigInteger>(reader);
+                        }
+                        else if (String.Equals(propertyName, HighestBlockKey))
+                        {
+                            reader.Read();
+                            highestBlock = serializer.Deserialize<BigInteger>(reader);
+                        }
+                    }
+                }
+
+                return new EthSyncing(startingBlock, currentBlock, highestBlock);
             }
         }
 
@@ -40,10 +70,10 @@ namespace Eth.Json.Converters
 
             var obj = value as EthSyncing;
 
-            if(obj == null) throw new JsonSerializationException("value is not of type EthSyncing");
-
             if(obj.IsSynching)
             {
+                writer.WriteStartObject();
+
                 writer.WritePropertyName(StartingBlockKey);
                 serializer.Serialize(writer, obj.StartingBlock.Value);
 
@@ -52,15 +82,13 @@ namespace Eth.Json.Converters
 
                 writer.WritePropertyName(HighestBlockKey);
                 serializer.Serialize(writer, obj.HighestBlock.Value);
+
+                writer.WriteEndObject();
             }
             else
             {
                 writer.WriteValue(false);
             }
         }
-
-        public override bool CanRead { get { return true; } }
-
-        public override bool CanWrite { get { return true; } }
     }
 }

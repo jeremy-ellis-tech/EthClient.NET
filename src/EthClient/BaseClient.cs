@@ -80,9 +80,9 @@ namespace Eth
         }
 
         /// <summary>
-        /// Returns true if client is actively listening for network connections
+        /// Returns true if client is actively listening for network connections.
         /// </summary>
-        /// <returns>true when listening, otherwise false</returns>
+        /// <returns>true when listening, otherwise false.</returns>
         public async Task<bool> NetListeningAsync()
         {
             RpcRequest request = BuildRpcRequest("net_listening");
@@ -109,6 +109,18 @@ namespace Eth
         {
             RpcRequest request = BuildRpcRequest("eth_protocolVersion");
             RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Returns an object with data about the sync status or False.
+        /// </summary>
+        /// <exception cref="System.InvalidCastException">Thrown if json returned cannot be deserialized to bool or Json.EthSyncing</exception>
+        /// <returns>An object with sync status data or False, when not syncing</returns>
+        public async Task<EthSyncing> EthSyncingAsync()
+        {
+            RpcRequest request = BuildRpcRequest("eth_syncing");
+            RpcResponse<EthSyncing> response = await PostRpcRequestAsync<EthSyncing>(request);
             return response.Result;
         }
 
@@ -157,43 +169,6 @@ namespace Eth
         }
 
         /// <summary>
-        /// Creates new message call transaction or a contract creation, if the data field contains code.
-        /// </summary>
-        /// <param name="transaction">The transaction to send</param>
-        /// <returns>The transaction hash, or the zero hash if the transaction is not yet available</returns>
-        public async Task<byte[]> EthSendTransactionAsync(EthTransaction transaction)
-        {
-            RpcRequest request = BuildRpcRequest("eth_sendTransaction", transaction);
-            RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Creates new message call transaction or a contract creation for signed transactions.
-        /// </summary>
-        /// <param name="data">The signed transaction data</param>
-        /// <returns>32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available.
-        /// Use eth_getTransactionReceipt to get the contract address, after the transaction was mined, when you created a contract.</returns>
-        public async Task<byte[]> EthSendRawTransactionAsync(byte[] data)
-        {
-            RpcRequest request = BuildRpcRequest("eth_sendRawTransaction", data);
-            RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Returns an object with data about the sync status or False.
-        /// </summary>
-        /// <exception cref="System.InvalidCastException">Thrown if json returned cannot be deserialized to bool or Json.EthSyncing</exception>
-        /// <returns>An object with sync status data or False, when not syncing</returns>
-        public async Task<EthSyncing> EthSyncingAsync()
-        {
-            RpcRequest request = BuildRpcRequest("eth_syncing");
-            RpcResponse<EthSyncing> response = await PostRpcRequestAsync<EthSyncing>(request);
-            return response.Result;
-        }
-
-        /// <summary>
         /// Returns a list of addresses owned by the client
         /// </summary>
         /// <returns>Array of 20 bytes, address owned by the client</returns>
@@ -205,11 +180,22 @@ namespace Eth
         }
 
         /// <summary>
+        /// Returns the number of most recent block.
+        /// </summary>
+        /// <returns>integer of the current block number the client is on.</returns>
+        public async Task<BigInteger> EthBlockNumberAsync()
+        {
+            RpcRequest request = BuildRpcRequest("eth_blockNumber");
+            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
+            return response.Result;
+        }
+
+        /// <summary>
         /// Returns the balance of the account of given address.
         /// </summary>
         /// <param name="address">20 Bytes - address to check for balance.</param>
         /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
         /// <returns>Integer of the current balance in wei.</returns>
         public async Task<BigInteger> EthGetBalanceAsync(byte[] address, DefaultBlock defaultBlock)
         {
@@ -226,8 +212,8 @@ namespace Eth
         /// <param name="address">20 Bytes - address of the storage.</param>
         /// <param name="position">integer of the position in the storage.</param>
         /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if address or defaultBlock is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
+        /// <exception cref="ArgumentNullException">Thrown if address or defaultBlock is null</exception>
         /// <returns></returns>
         public async Task<byte[]> EthGetStorageAtAsync(byte[] address, BigInteger position, DefaultBlock defaultBlock)
         {
@@ -241,22 +227,11 @@ namespace Eth
         }
 
         /// <summary>
-        /// Returns the number of most recent block.
-        /// </summary>
-        /// <returns>integer of the current block number the client is on.</returns>
-        public async Task<BigInteger> EthBlockNumberAsync()
-        {
-            RpcRequest request = BuildRpcRequest("eth_blockNumber");
-            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
-            return response.Result;
-        }
-
-        /// <summary>
         /// Returns the number of transactions sent from an address.
         /// </summary>
         /// <param name="address"> 20 Bytes - address.</param>
         /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
         /// <returns></returns>
         public async Task<BigInteger> EthGetTransactionCountAsync(byte[] address, DefaultBlock defaultBlock)
         {
@@ -270,14 +245,11 @@ namespace Eth
         /// <summary>
         /// Returns the number of transactions in a block from a block matching the given block hash.
         /// </summary>
-        /// <param name="blockHash">32 Bytes - hash of a block</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if blockHash is not 32 bytes long</exception>
+        /// <param name="hash">32 Bytes - hash of a block</param>
         /// <returns>integer of the number of transactions in this block.</returns>
-        public async Task<BigInteger> EthGetTransactionCountByHashAsync(byte[] blockHash)
+        public async Task<BigInteger> EthGetBlockTransactionCountByHashAsync(byte[] hash)
         {
-            Ensure.EnsureCountIsCorrect(blockHash, EthSpecs.BlockHashLength, "blockHash");
-
-            RpcRequest request = BuildRpcRequest("eth_getBlockTransactionCountByHash", blockHash);
+            RpcRequest request = BuildRpcRequest("eth_getBlockTransactionCountByHash", hash);
             RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
             return response.Result;
         }
@@ -298,12 +270,9 @@ namespace Eth
         /// Returns the number of uncles in a block from a block matching the given block hash.
         /// </summary>
         /// <param name="blockHash">32 Bytes - hash of a block</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if blockHash is not 32 bytes long</exception>
         /// <returns>integer of the number of uncles in this block.</returns>
         public async Task<BigInteger> EthGetUncleCountByBlockHashAsync(byte[] blockHash)
         {
-            Ensure.EnsureCountIsCorrect(blockHash, EthSpecs.BlockHashLength, "blockHash");
-
             RpcRequest request = BuildRpcRequest("eth_getUncleCountByBlockHash", blockHash);
             RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
             return response.Result;
@@ -326,7 +295,7 @@ namespace Eth
         /// </summary>
         /// <param name="address">20 Bytes - address</param>
         /// <param name="defaultBlock">integer block number, or the string "latest", "earliest" or "pending"</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
         /// <returns>The code from the given address.</returns>
         public async Task<byte[]> EthGetCodeAsync(byte[] address, DefaultBlock defaultBlock)
         {
@@ -338,18 +307,70 @@ namespace Eth
         }
 
         /// <summary>
+        /// Returns the number of transactions in a block from a block matching the given block hash.
+        /// </summary>
+        /// <param name="blockHash">32 Bytes - hash of a block</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if blockHash is not 32 bytes long</exception>
+        /// <returns>integer of the number of transactions in this block.</returns>
+        public async Task<BigInteger> EthGetTransactionCountByHashAsync(byte[] blockHash)
+        {
+            Ensure.EnsureCountIsCorrect(blockHash, EthSpecs.BlockHashLength, "blockHash");
+
+            RpcRequest request = BuildRpcRequest("eth_getBlockTransactionCountByHash", blockHash);
+            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Returns the number of transactions in a block from a block matching the given block number.
+        /// </summary>
+        /// <param name="defaultBlock">integer of a block number, or the string "earliest", "latest" or "pending"</param>
+        /// <returns>integer of the number of transactions in this block.</returns>
+        public async Task<BigInteger> EthGetTransactionCountByNumberAsync(DefaultBlock defaultBlock)
+        {
+            RpcRequest request = BuildRpcRequest("eth_getBlockTransactionCountByNumber", defaultBlock);
+            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
+            return response.Result;
+        }
+
+        /// <summary>
         /// Signs data with a given address.
         /// NB. the address to sign must be unlocked.
         /// </summary>
         /// <param name="address">20 Bytes - address</param>
         /// <param name="data">Data to sign</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if address is not 20 bytes long</exception>
         /// <returns>Signed data</returns>
         public async Task<byte[]> EthSignAsync(byte[] address, byte[] data)
         {
             Ensure.EnsureCountIsCorrect(address, EthSpecs.AddressLength, "address");
 
             RpcRequest request = BuildRpcRequest("eth_sign", address, data);
+            RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Creates new message call transaction or a contract creation, if the data field contains code.
+        /// </summary>
+        /// <param name="transaction">The transaction to send</param>
+        /// <returns>The transaction hash, or the zero hash if the transaction is not yet available</returns>
+        public async Task<byte[]> EthSendTransactionAsync(EthTransaction transaction)
+        {
+            RpcRequest request = BuildRpcRequest("eth_sendTransaction", transaction);
+            RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Creates new message call transaction or a contract creation for signed transactions.
+        /// </summary>
+        /// <param name="data">The signed transaction data</param>
+        /// <returns>32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available.
+        /// Use eth_getTransactionReceipt to get the contract address, after the transaction was mined, when you created a contract.</returns>
+        public async Task<byte[]> EthSendRawTransactionAsync(byte[] data)
+        {
+            RpcRequest request = BuildRpcRequest("eth_sendRawTransaction", data);
             RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
             return response.Result;
         }
@@ -385,7 +406,7 @@ namespace Eth
         /// </summary>
         /// <param name="blockHash">32 Bytes - Hash of a block.</param>
         /// <param name="fullTransaction">If true it returns the full transaction objects, if false only the hashes of the transactions</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if blockHash is not 32 bytes long</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if blockHash is not 32 bytes long</exception>
         /// <returns>A block object, or null when no block was found</returns>
         public async Task<EthBlock> EthGetBlockByHashAsync(byte[] blockHash, bool fullTransaction)
         {
@@ -425,6 +446,19 @@ namespace Eth
         }
 
         /// <summary>
+        /// Returns information about a transaction by block hash and transaction index position.
+        /// </summary>
+        /// <param name="blockHash">32 Bytes - hash of a block.</param>
+        /// <param name="index">integer of the transaction index position.</param>
+        /// <returns>The transaction at the position in the block</returns>
+        public async Task<EthTransaction> EthGetTransactionByBlockHashAndIndexAsync(byte[] blockHash, BigInteger index)
+        {
+            RpcRequest request = BuildRpcRequest("eth_getTransactionByBlockHashAndIndex", blockHash, index);
+            RpcResponse<EthTransaction> response = await PostRpcRequestAsync<EthTransaction>(request);
+            return response.Result;
+        }
+
+        /// <summary>
         /// Returns information about a transaction by block number and transaction index position.
         /// </summary>
         /// <param name="defaultBlock">a block number, or the string "earliest", "latest" or "pending"</param>
@@ -450,6 +484,32 @@ namespace Eth
 
             RpcRequest request = BuildRpcRequest("eth_getTransactionReceipt", transactionHash);
             RpcResponse<EthTransactionReceipt> response = await PostRpcRequestAsync<EthTransactionReceipt>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Returns information about a uncle of a block by hash and uncle index position.
+        /// </summary>
+        /// <param name="blockHash">32 Bytes - hash a block.</param>
+        /// <param name="index">the uncle's index position.</param>
+        /// <returns>The uncle block</returns>
+        public async Task<EthBlock> EthGetUncleByBlockHashAndIndexAsync(byte[] blockHash, BigInteger index)
+        {
+            RpcRequest request = BuildRpcRequest("eth_getUncleByBlockHashAndIndex", blockHash, index);
+            RpcResponse<EthBlock> response = await PostRpcRequestAsync<EthBlock>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Returns information about a uncle of a block by number and uncle index position.
+        /// </summary>
+        /// <param name="defaultBlock">a block number, or the string "earliest", "latest" or "pending"</param>
+        /// <param name="index">the uncle's index position</param>
+        /// <returns>The uncle block</returns>
+        public async Task<EthBlock> EthGetUncleByBlockNumberAndIndexAsync(DefaultBlock defaultBlock, BigInteger index)
+        {
+            RpcRequest request = BuildRpcRequest("eth_getUncleByBlockNumberAndIndex", defaultBlock, index);
+            RpcResponse<EthBlock> response = await PostRpcRequestAsync<EthBlock>(request);
             return response.Result;
         }
 
@@ -676,6 +736,29 @@ namespace Eth
         }
 
         /// <summary>
+        /// Returns the current whisper protocol version.
+        /// </summary>
+        /// <returns>The current whisper protocol version</returns>
+        public async Task<string> ShhVersionAsync()
+        {
+            RpcRequest request = BuildRpcRequest("shh_version");
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Sends a whisper message.
+        /// </summary>
+        /// <param name="post">The whisper post object</param>
+        /// <returns>returns true if the message was send, otherwise false.</returns>
+        public async Task<bool> ShhPostAsync(ShhPost post)
+        {
+            RpcRequest request = BuildRpcRequest("shh_version", post);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
+            return response.Result;
+        }
+
+        /// <summary>
         /// Creates new whisper identity in the client.
         /// </summary>
         /// <returns>60 Bytes - the address of the new identiy.</returns>
@@ -698,6 +781,80 @@ namespace Eth
 
             RpcRequest request = BuildRpcRequest("shh_hasIdentity", address);
             RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// ?
+        /// </summary>
+        /// <returns>60 Bytes - the address of the new group</returns>
+        public async Task<byte[]> ShhNewGroupAsync()
+        {
+            RpcRequest request = BuildRpcRequest("shh_newGroup");
+            RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// ?
+        /// </summary>
+        /// <param name="address">60 Bytes - The identity address to add to a group</param>
+        /// <returns>returns true if the identity was successfully added to the group, otherwise false</returns>
+        public async Task<bool> ShhAddToGroupAsync(byte[] address)
+        {
+            RpcRequest request = BuildRpcRequest("shh_addToGroup", address);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Creates filter to notify, when client receives whisper message matching the filter options.
+        /// </summary>
+        /// <param name="options">The filter options:</param>
+        /// <returns>The newly created filter.</returns>
+        public async Task<BigInteger> ShhNewFilterAsync(ShhFilterOptions options)
+        {
+            RpcRequest request = BuildRpcRequest("shh_newFilter", options);
+            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Uninstalls a filter with given id. Should always be called when watch is no longer needed.
+        /// Additonally Filters timeout when they aren't requested with shh_getFilterChanges for a period of time.
+        /// </summary>
+        /// <param name="filterId">The filter id.</param>
+        /// <returns>true if the filter was successfully uninstalled, otherwise false.</returns>
+        public async Task<bool> ShhUninstallFilterAsync(BigInteger filterId)
+        {
+            RpcRequest request = BuildRpcRequest("shh_uninstallFilter", filterId);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Polling method for whisper filters. Returns new messages since the last call of this method.
+        /// 
+        /// Note calling the shh_getMessages method, will reset the buffer for this method, so that you won't receive duplicate messages.
+        /// </summary>
+        /// <param name="filterId">The filter id.</param>
+        /// <returns>Array of messages received since last poll</returns>
+        public async Task<IList<ShhMessage>> ShhGetFilterChangesAsync(BigInteger filterId)
+        {
+            RpcRequest request = BuildRpcRequest("shh_getFilterChanges", filterId);
+            RpcResponse<IList<ShhMessage>> response = await PostRpcRequestAsync<IList<ShhMessage>>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Get all messages matching a filter. Unlike shh_getFilterChanges this returns all messages.
+        /// </summary>
+        /// <param name="filterId">The filter id.</param>
+        /// <returns>Array of messages</returns>
+        public async Task<IList<ShhMessage>> ShhGetMessages(BigInteger filterId)
+        {
+            RpcRequest request = BuildRpcRequest("shh_getMessages", filterId);
+            RpcResponse<IList<ShhMessage>> response = await PostRpcRequestAsync<IList<ShhMessage>>(request);
             return response.Result;
         }
     }

@@ -70,6 +70,9 @@
     <Compile Include="Json\Converters\RpcRequestConverter.cs" />
     <Compile Include="Json\Converters\EthSolidityContractConverter.cs" />
     <Compile Include="RpcClient.cs" />
+    <Compile Include="Rpc\ShhFilterOptions.cs" />
+    <Compile Include="Rpc\ShhMessage.cs" />
+    <Compile Include="Rpc\ShhPost.cs" />
     <Compile Include="Utilities\EthCurrencyConverter.cs" />
     <Compile Include="Utilities\EthCurrencyUnit.cs" />
     <Compile Include="Utilities\EthSpecs.cs" />
