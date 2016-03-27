@@ -34,10 +34,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Abi\BoolAbiValue.cs" />
+    <Compile Include="Abi\BytesAbiValue.cs" />
     <Compile Include="Abi\ContractCallEncoder.cs" />
     <Compile Include="Abi\IContractCallEncoder.cs" />
     <Compile Include="Abi\IAbiValue.cs" />
     <Compile Include="Abi\IKeccak.cs" />
+    <Compile Include="Abi\StringAbiValue.cs" />
     <Compile Include="Abi\UInt256AbiValue.cs" />
     <Compile Include="Abi\UInt32AbiValue.cs" />
     <Compile Include="EthContract.cs" />

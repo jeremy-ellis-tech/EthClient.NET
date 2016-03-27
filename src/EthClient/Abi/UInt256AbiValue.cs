@@ -51,12 +51,19 @@ namespace Eth.Abi
             }
         }
 
+        private byte[] _tail;
         public byte[] Tail
         {
             get
             {
-                return null;
+                if (_tail == null)
+                {
+                    _tail = Enumerable.Empty<byte>().ToArray();
+                }
+
+                return _tail;
             }
+
             set
             {
                 return;

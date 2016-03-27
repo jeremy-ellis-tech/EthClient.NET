@@ -31,22 +31,30 @@ namespace Eth.Abi
 
         public byte[] Encode(string functionName, params IAbiValue[] parameters)
         {
-            List<byte> serialzed = new List<byte>();
+            string paramPart = parameters != null && parameters.Count() > 0 ? String.Join(",", parameters.Select(x => x.Name)) : String.Empty;
+            byte[] functionSelector = _keccak.GetDigest(Encoding.UTF8.GetBytes(String.Concat(functionName, "(", paramPart, ")"))).Take(4).ToArray();
 
-            string paramPart = parameters == null || parameters.Count() == 0 ? String.Empty : String.Join(",", parameters.Select(x => x.Name));
-            serialzed.AddRange(_keccak.GetDigest(Encoding.UTF8.GetBytes(String.Concat(functionName, "(", paramPart, ")"))).Take(4).ToArray());
+            List<byte> heads = new List<byte>();
+            List<byte> tails = new List<byte>();
+
+            int headOffset = 32 * parameters.Count();
 
             foreach (var p in parameters)
             {
+                //If p is dynamic the head is set as the position in the array
+                //That the tail of the encoded value begins.
                 if(p.IsDynamic)
                 {
-                    throw new NotImplementedException("Dynamic types not implemented yet");
+                    int offset = headOffset + tails.Count;
+                    byte[] b = BitConverter.IsLittleEndian ? BitConverter.GetBytes(offset).Reverse().ToArray() : BitConverter.GetBytes(offset).ToArray();
+                    p.Head = Enumerable.Repeat<byte>(0x0, 32 - b.Length).Concat(b).ToArray();
                 }
 
-                serialzed.AddRange(p.Head);
+                heads.AddRange(p.Head);
+                tails.AddRange(p.Tail);
             }
 
-            return serialzed.ToArray();
+            return functionSelector.Concat(heads).Concat(tails).ToArray();
         }
     }
 }

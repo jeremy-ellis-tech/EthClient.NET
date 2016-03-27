@@ -1,4 +1,5 @@
 ﻿using Eth;
+using Eth.Abi;
 using Eth.Json;
 using Eth.Rpc;
 using EthClient.Test.Mocks;
@@ -99,6 +100,25 @@ namespace EthClient.Test
         public void ShouldNotBeAbleToCreateRpcClientWithInvalidUri()
         {
             BaseClient client = new RpcClient("127.0.0.1:-1");
+        }
+
+        [TestMethod]
+        public void ShouldSerializerContractCallCorrectly()
+        {
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            //Return a bool as an abi encoded byte array;
+            response.Content = new StringContent("{\"id\":0,\"jsonrpc\":\"2.0\",\"result\":\"0x00000000000000000000000000000000000000000000000000000000000001\"}");
+
+            var mockHttpMessageHandler = new MockHttpMessageHandler(response);
+            var mockHttpClient = new HttpClient(mockHttpMessageHandler);
+
+            var rpcClient = new RpcClient("127.0.0.1:8545", mockHttpClient, new JsonSerializer());
+            var contract = rpcClient.GetContractAt(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+
+            BoolAbiValue returned = contract.CallAsync<BoolAbiValue>("myFunction", new BoolAbiValue(true)).Result;
+
+            Assert.IsTrue(returned != null && (bool)returned);
         }
     }
 }

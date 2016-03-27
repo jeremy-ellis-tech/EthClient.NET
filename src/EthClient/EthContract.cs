@@ -43,6 +43,23 @@ namespace Eth
         }
 
         /// <summary>
+        /// Call a contract's function, which has one return value,
+        /// without sending a transaction
+        /// This function must be declared <code>constant</code>
+        /// and cannot change the contract's state
+        /// </summary>
+        /// <typeparam name="T">The expected AbiValue return type</typeparam>
+        /// <param name="functionName">The function name</param>
+        /// <param name="parameters">The function parameters</param>
+        /// <returns>The return value of the function, wrapped in the appropriate IAbiValue container</returns>
+        public async Task<T> CallAsync<T>(string functionName, params IAbiValue[] parameters) where T : class, IAbiValue, new()
+        {
+            List<IAbiValue> returns = new List<IAbiValue> { new T() };
+            await CallAsync(functionName, parameters, returns);
+            return returns[0] as T;
+        }
+
+        /// <summary>
         /// Call a contract's function with a transaction.
         /// </summary>
         /// <param name="functionName">The name of the function</param>
@@ -51,7 +68,7 @@ namespace Eth
         /// <param name="gas">gas limit (optional)</param>
         /// <param name="gasPrice">gas price (optional)</param>
         /// <param name="value">value (optional)</param>
-        public async Task TransactAsync(string functionName, IEnumerable<IAbiValue> parameters, byte[] from, BigInteger? gas = null, BigInteger? gasPrice = null, BigInteger? value = null)
+        public async Task<EthTransactionReceipt> TransactAsync(string functionName, IEnumerable<IAbiValue> parameters, byte[] from, BigInteger? gas = null, BigInteger? gasPrice = null, BigInteger? value = null)
         {
             EthTransaction transaction = new EthTransaction
             {
@@ -71,6 +88,8 @@ namespace Eth
             {
                 receipt = await _client.EthGetTransactionReceiptAsync(transactionHash);
             }
+
+            return receipt;
         }
     }
 }

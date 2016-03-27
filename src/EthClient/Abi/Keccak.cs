@@ -3,7 +3,7 @@
 namespace Eth.Abi
 {
     /// <summary>
-    /// Adapter class for KeccakDigest
+    /// Adapter for KeccakDigest
     /// </summary>
     public class Keccak : IKeccak
     {
