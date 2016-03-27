@@ -4,16 +4,16 @@ using System;
 
 namespace Eth.Json.Converters
 {
-    public class EthSolidityContractConverter : JsonConverter
+    public class FunctionInputOutputConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(EthSolidityContract);
+            return objectType == typeof(FunctionInputOutput);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
-            EthSolidityContract contract = new EthSolidityContract();
+            FunctionInputOutput functionInputOutput = new FunctionInputOutput();
             int startingDepth = reader.Depth;
 
             while (!(reader.TokenType == JsonToken.EndObject && reader.Depth == startingDepth))
@@ -23,25 +23,20 @@ namespace Eth.Json.Converters
                 {
                     string propertyName = reader.Value.ToString();
 
-                    if (String.Equals(propertyName, "code"))
+                    if (String.Equals(propertyName, "name"))
                     {
                         reader.Read();
-                        contract.Code = serializer.Deserialize<byte[]>(reader);
+                        functionInputOutput.Name = reader.Value.ToString();
                     }
-                    else if (String.Equals(propertyName, "info"))
+                    else if (String.Equals(propertyName, "type"))
                     {
                         reader.Read();
-                        contract.Info = serializer.Deserialize<ContractInfo>(reader);
-                    }
-                    else
-                    {
-                        contract.ContractName = reader.Value.ToString();
-                        reader.Read();
+                        functionInputOutput.Type = reader.Value.ToString();
                     }
                 }
             }
 
-            return contract;
+            return functionInputOutput;
         }
 
         public override void WriteJson(JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)

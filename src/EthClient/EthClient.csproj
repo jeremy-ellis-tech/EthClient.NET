@@ -41,8 +41,17 @@
     <Compile Include="Abi\IKeccak.cs" />
     <Compile Include="Abi\StringAbiValue.cs" />
     <Compile Include="Abi\UInt256AbiValue.cs" />
+    <Compile Include="Abi\UInt256ArrayAbiValue.cs" />
     <Compile Include="Abi\UInt32AbiValue.cs" />
     <Compile Include="EthContract.cs" />
+    <Compile Include="Json\Converters\AbiDefinitionConverter.cs" />
+    <Compile Include="Json\Converters\ContractInfoConverter.cs" />
+    <Compile Include="Json\Converters\EthCallConverter.cs" />
+    <Compile Include="Json\Converters\EthProofOfWorkConverter.cs" />
+    <Compile Include="Json\Converters\EthTransactionConverter.cs" />
+    <Compile Include="Json\Converters\FunctionInputOutputConverter.cs" />
+    <Compile Include="Json\Converters\ShhPostConverter.cs" />
+    <Compile Include="Json\Converters\TimeSpanConverter.cs" />
     <Compile Include="Rpc\DefaultBlockOption.cs" />
     <Compile Include="Rpc\EthBlock.cs" />
     <Compile Include="Rpc\EthError.cs" />
@@ -64,7 +73,6 @@
     <Compile Include="Json\Converters\EthLogTypeConverter.cs" />
     <Compile Include="Json\Converters\EthSyncingConverter.cs" />
     <Compile Include="Json\Converters\EthTopicConverter.cs" />
-    <Compile Include="Json\Converters\EthTransactionConverter.cs" />
     <Compile Include="Json\Converters\EthWorkConverter.cs" />
     <Compile Include="Json\Converters\NullableConverter.cs" />
     <Compile Include="Json\Converters\RpcRequestConverter.cs" />
@@ -76,7 +84,7 @@
     <Compile Include="Utilities\EthCurrencyConverter.cs" />
     <Compile Include="Utilities\EthCurrencyUnit.cs" />
     <Compile Include="Utilities\EthSpecs.cs" />
-    <Compile Include="Rpc\EthException.cs" />
+    <Compile Include="EthException.cs" />
     <Compile Include="Json\IJsonSerializer.cs" />
     <Compile Include="Json\JsonSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

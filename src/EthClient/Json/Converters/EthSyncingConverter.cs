@@ -90,5 +90,7 @@ namespace Eth.Json.Converters
                 writer.WriteValue(false);
             }
         }
+
+        public override bool CanWrite { get { return false; } }
     }
 }

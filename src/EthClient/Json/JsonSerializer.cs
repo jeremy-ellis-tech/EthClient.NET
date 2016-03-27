@@ -18,13 +18,21 @@ namespace Eth.Json
                 {
                     new ByteArrayConverter(),
                     new BigIntegerConverter(),
+                    new TimeSpanConverter(),
+                    new NullableConverter<BigInteger>(),
                     new DefaultBlockConverter(),
                     new EthSyncingConverter(),
-                    new NullableConverter<BigInteger>(),
                     new EthBlockConverter(),
                     new DateTimeOffsetConverter(),
                     new EthWorkConverter(),
                     new RpcRequestConverter(),
+                    new EthTransactionConverter(),
+                    new EthSolidityContractConverter(),
+                    new ContractInfoConverter(),
+                    new AbiDefinitionConverter(),
+                    new FunctionInputOutputConverter(),
+                    new EthCallConverter(),
+                    new ShhPostConverter(),
                 }
             };
         }

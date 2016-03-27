@@ -13,6 +13,11 @@ namespace Eth.Abi
             _value = value;
         }
 
+        public BytesAbiValue(string value)
+        {
+            _value = Encoding.UTF8.GetBytes(value);
+        }
+
         public BytesAbiValue()
         {
 

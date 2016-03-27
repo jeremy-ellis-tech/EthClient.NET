@@ -83,5 +83,10 @@ namespace Eth.Abi
                 return _value.Value;
             }
         }
+
+        public static explicit operator BigInteger(UInt256AbiValue value)
+        {
+            return value.Value;
+        }
     }
 }

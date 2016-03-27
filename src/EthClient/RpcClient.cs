@@ -63,8 +63,8 @@ namespace Eth
         /// </summary>
         /// <typeparam name="T">The json type of the expected response (eg. string, bool)</typeparam>
         /// <param name="request">The RpcRequest</param>
-        /// <exception cref="Eth.EthException">Thrown if the RPC call returns an error</exception>
-        /// <exception cref="System.ObjectDisposedException">Thrown if this RpcClient has been disposed</exception>
+        /// <exception cref="EthException">Thrown if the RPC call returns an error</exception>
+        /// <exception cref="ObjectDisposedException">Thrown if this RpcClient has been disposed</exception>
         /// <returns>The raw RPC response</returns>
         public override async Task<RpcResponse<T>> PostRpcRequestAsync<T>(RpcRequest request)
         {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Eth.Rpc
+namespace Eth
 {
     public class EthException : Exception
     {

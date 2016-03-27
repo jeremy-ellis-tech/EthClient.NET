@@ -4,11 +4,11 @@ using System;
 
 namespace Eth.Json.Converters
 {
-    public class EthFilterOptionsConverter : JsonConverter
+    public class EthCallConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(EthFilterOptions);
+            return objectType == typeof(EthCall);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
@@ -24,26 +24,27 @@ namespace Eth.Json.Converters
                 return;
             }
 
-            var obj = value as EthFilterOptions;
-
-            if(obj == null)
-            {
-                throw new ArgumentOutOfRangeException("value");
-            }
+            EthCall call = value as EthCall;
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("fromBlock");
-            serializer.Serialize(writer, obj.FromBlock);
+            writer.WritePropertyName("from");
+            serializer.Serialize(writer, call.From);
 
-            writer.WritePropertyName("toBlock");
-            serializer.Serialize(writer, obj.ToBlock);
+            writer.WritePropertyName("to");
+            serializer.Serialize(writer, call.To);
 
-            writer.WritePropertyName("address");
-            serializer.Serialize(writer, obj.Address);
+            writer.WritePropertyName("gas");
+            serializer.Serialize(writer, call.Gas);
 
-            writer.WritePropertyName("topics");
-            serializer.Serialize(writer, obj.Topics);
+            writer.WritePropertyName("gasPrice");
+            serializer.Serialize(writer, call.GasPrice);
+
+            writer.WritePropertyName("value");
+            serializer.Serialize(writer, call.Value);
+
+            writer.WritePropertyName("data");
+            serializer.Serialize(writer, call.Data);
 
             writer.WriteEndObject();
         }

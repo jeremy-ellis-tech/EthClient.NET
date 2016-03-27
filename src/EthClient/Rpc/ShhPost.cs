@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Eth.Rpc
@@ -33,8 +34,8 @@ namespace Eth.Rpc
         public BigInteger Priority { get; set; }
 
         /// <summary>
-        /// integer of the time to live in seconds.
+        /// Time to live
         /// </summary>
-        public BigInteger Ttl { get; set; }
+        public TimeSpan Ttl { get; set; }
     }
 }

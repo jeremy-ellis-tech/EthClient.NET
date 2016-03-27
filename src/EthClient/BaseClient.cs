@@ -57,7 +57,7 @@ namespace Eth
         /// Returns Keccak-256 (not the standardized SHA3-256) hash of the given data.
         /// </summary>
         /// <param name="data">The data to hash</param>
-        /// <exception cref="System.NullReferenceException">Thrown if data is null</exception>
+        /// <exception cref="NullReferenceException">Thrown if data is null</exception>
         /// <returns>The hash of the given data</returns>
         public async Task<byte[]> Web3Sha3Async(byte[] data)
         {
@@ -80,17 +80,6 @@ namespace Eth
         }
 
         /// <summary>
-        /// Returns true if client is actively listening for network connections.
-        /// </summary>
-        /// <returns>true when listening, otherwise false.</returns>
-        public async Task<bool> NetListeningAsync()
-        {
-            RpcRequest request = BuildRpcRequest("net_listening");
-            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
-            return response.Result;
-        }
-
-        /// <summary>
         /// Returns number of peers currenly connected to the client.
         /// </summary>
         /// <returns>The number of connected peers.</returns>
@@ -98,6 +87,17 @@ namespace Eth
         {
             RpcRequest request = BuildRpcRequest("net_peerCount");
             RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Returns true if client is actively listening for network connections.
+        /// </summary>
+        /// <returns>true when listening, otherwise false.</returns>
+        public async Task<bool> NetListeningAsync()
+        {
+            RpcRequest request = BuildRpcRequest("net_listening");
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
             return response.Result;
         }
 
@@ -115,7 +115,6 @@ namespace Eth
         /// <summary>
         /// Returns an object with data about the sync status or False.
         /// </summary>
-        /// <exception cref="System.InvalidCastException">Thrown if json returned cannot be deserialized to bool or Json.EthSyncing</exception>
         /// <returns>An object with sync status data or False, when not syncing</returns>
         public async Task<EthSyncing> EthSyncingAsync()
         {
@@ -267,6 +266,33 @@ namespace Eth
         }
 
         /// <summary>
+        /// Returns the number of transactions in a block from a block matching the given block hash.
+        /// </summary>
+        /// <param name="blockHash">32 Bytes - hash of a block</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if blockHash is not 32 bytes long</exception>
+        /// <returns>integer of the number of transactions in this block.</returns>
+        public async Task<BigInteger> EthGetTransactionCountByHashAsync(byte[] blockHash)
+        {
+            Ensure.EnsureCountIsCorrect(blockHash, EthSpecs.BlockHashLength, "blockHash");
+
+            RpcRequest request = BuildRpcRequest("eth_getBlockTransactionCountByHash", blockHash);
+            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Returns the number of transactions in a block from a block matching the given block number.
+        /// </summary>
+        /// <param name="defaultBlock">integer of a block number, or the string "earliest", "latest" or "pending"</param>
+        /// <returns>integer of the number of transactions in this block.</returns>
+        public async Task<BigInteger> EthGetTransactionCountByNumberAsync(DefaultBlock defaultBlock)
+        {
+            RpcRequest request = BuildRpcRequest("eth_getBlockTransactionCountByNumber", defaultBlock);
+            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
+            return response.Result;
+        }
+
+        /// <summary>
         /// Returns the number of uncles in a block from a block matching the given block hash.
         /// </summary>
         /// <param name="blockHash">32 Bytes - hash of a block</param>
@@ -303,33 +329,6 @@ namespace Eth
 
             RpcRequest request = BuildRpcRequest("eth_getCode", address, defaultBlock);
             RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Returns the number of transactions in a block from a block matching the given block hash.
-        /// </summary>
-        /// <param name="blockHash">32 Bytes - hash of a block</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if blockHash is not 32 bytes long</exception>
-        /// <returns>integer of the number of transactions in this block.</returns>
-        public async Task<BigInteger> EthGetTransactionCountByHashAsync(byte[] blockHash)
-        {
-            Ensure.EnsureCountIsCorrect(blockHash, EthSpecs.BlockHashLength, "blockHash");
-
-            RpcRequest request = BuildRpcRequest("eth_getBlockTransactionCountByHash", blockHash);
-            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Returns the number of transactions in a block from a block matching the given block number.
-        /// </summary>
-        /// <param name="defaultBlock">integer of a block number, or the string "earliest", "latest" or "pending"</param>
-        /// <returns>integer of the number of transactions in this block.</returns>
-        public async Task<BigInteger> EthGetTransactionCountByNumberAsync(DefaultBlock defaultBlock)
-        {
-            RpcRequest request = BuildRpcRequest("eth_getBlockTransactionCountByNumber", defaultBlock);
-            RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
             return response.Result;
         }
 
@@ -383,7 +382,7 @@ namespace Eth
         /// <returns>the return value of executed contract</returns>
         public async Task<byte[]> EthCallAsync(EthCall call, DefaultBlock defaultBlock)
         {
-            RpcRequest request = BuildRpcRequest("eth_call", new { from = call.From, to = call.To, gas = call.Gas, gasPrice = call.GasPrice, value = call.Value, data = call.Data }, defaultBlock);
+            RpcRequest request = BuildRpcRequest("eth_call", call, defaultBlock);
             RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
             return response.Result;
         }
@@ -396,7 +395,7 @@ namespace Eth
         /// <returns>the amount of gas used.</returns>
         public async Task<BigInteger> EthEstimateGasAsync(EthCall call, DefaultBlock defaultBlock)
         {
-            RpcRequest request = BuildRpcRequest("eth_estimateGas", new { from = call.From, to = call.To, gas = call.Gas, gasPrice = call.GasPrice, value = call.Value, data = call.Data }, defaultBlock);
+            RpcRequest request = BuildRpcRequest("eth_estimateGas", call, defaultBlock);
             RpcResponse<BigInteger> response = await PostRpcRequestAsync<BigInteger>(request);
             return response.Result;
         }
@@ -531,25 +530,10 @@ namespace Eth
         }
 
         /// <summary>
-        /// Returns compiled solidity code.
-        /// </summary>
-        /// <param name="sourceCode">The source code.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
-        /// <returns>The compiled source code</returns>
-        public async Task<IList<EthSolidityContract>> EthCompileSolidityAsync(string sourceCode)
-        {
-            Ensure.EnsureStringIsNotNullOrEmpty(sourceCode, "sourceCode");
-
-            RpcRequest request = BuildRpcRequest("eth_compileSolidity", sourceCode);
-            RpcResponse<IList<EthSolidityContract>> response = await PostRpcRequestAsync<IList<EthSolidityContract>>(request);
-            return response.Result;
-        }
-
-        /// <summary>
         /// Returns compiled LLL code
         /// </summary>
         /// <param name="sourceCode">The source code</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
         /// <returns>The compiled source code</returns>
         public async Task<byte[]> EthCompileLllAsync(string sourceCode)
         {
@@ -561,10 +545,25 @@ namespace Eth
         }
 
         /// <summary>
+        /// Returns compiled solidity code.
+        /// </summary>
+        /// <param name="sourceCode">The source code.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
+        /// <returns>The compiled source code</returns>
+        public async Task<IList<EthSolidityContract>> EthCompileSolidityAsync(string sourceCode)
+        {
+            Ensure.EnsureStringIsNotNullOrEmpty(sourceCode, "sourceCode");
+
+            RpcRequest request = BuildRpcRequest("eth_compileSolidity", sourceCode);
+            RpcResponse<IList<EthSolidityContract>> response = await PostRpcRequestAsync<IList<EthSolidityContract>>(request);
+            return response.Result;
+        }
+
+        /// <summary>
         /// Returns compiled Serpent code
         /// </summary>
         /// <param name="sourceCode">The source code</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if sourceCode is an empty string</exception>
         /// <returns>The compiled source code</returns>
         public async Task<byte[]> EthCompileSerpentAsync(string sourceCode)
         {
@@ -667,7 +666,7 @@ namespace Eth
         /// <returns>returns true if the provided solution is valid, otherwise false</returns>
         public async Task<bool> EthSubmitWorkAsync(EthProofOfWork proofOfWork)
         {
-            RpcRequest request = BuildRpcRequest("eth_submitWork", proofOfWork.Nonce, proofOfWork.PowHash, proofOfWork.MixDigest);
+            RpcRequest request = BuildRpcRequest("eth_submitWork", proofOfWork);
             RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
             return response.Result;
         }
@@ -692,6 +691,60 @@ namespace Eth
             RpcRequest request = BuildRpcRequest("eth_submitHashrate", hashRate, clientID);
             RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
 
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Stores a string in the local database
+        /// </summary>
+        /// <param name="dbName">Database name</param>
+        /// <param name="keyName">Key name</param>
+        /// <param name="value">String to store</param>
+        /// <returns>returns true if the value was stored, otherwise false</returns>
+        public async Task<bool> DbPutStringAsync(string dbName, string keyName, string value)
+        {
+            RpcRequest request = BuildRpcRequest("db_putString", dbName, keyName, value);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Returns string from the local database.
+        /// </summary>
+        /// <param name="dbName">Database name</param>
+        /// <param name="keyName">Key name</param>
+        /// <returns>The previously stored string</returns>
+        public async Task<string> DbGetStringAsync(string dbName, string keyName)
+        {
+            RpcRequest request = BuildRpcRequest("db_getString", dbName, keyName);
+            RpcResponse<string> response = await PostRpcRequestAsync<string>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Stores binary data in the local database.
+        /// </summary>
+        /// <param name="dbName">Database name</param>
+        /// <param name="keyName">Key name</param>
+        /// <param name="data">The data to store</param>
+        /// <returns>returns true if the value was stored, otherwise false</returns>
+        public async Task<bool> DbPutHexAsync(string dbName, string keyName, byte[] data)
+        {
+            RpcRequest request = BuildRpcRequest("db_putHex", dbName, keyName, data);
+            RpcResponse<bool> response = await PostRpcRequestAsync<bool>(request);
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Returns binary data from the local database.
+        /// </summary>
+        /// <param name="dbName">Database name</param>
+        /// <param name="keyName">Key name</param>
+        /// <returns>The previously stored data</returns>
+        public async Task<byte[]> DbGetHexAsync(string dbName, string keyName)
+        {
+            RpcRequest request = BuildRpcRequest("db_getHex", dbName, keyName);
+            RpcResponse<byte[]> response = await PostRpcRequestAsync<byte[]>(request);
             return response.Result;
         }
 

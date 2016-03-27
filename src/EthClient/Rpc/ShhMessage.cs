@@ -27,9 +27,9 @@ namespace Eth.Rpc
         public BigInteger Expiry { get; set; }
 
         /// <summary>
-        /// Integer of the time the message should float in the system in seconds (?).
+        /// Time the message should float in the system.
         /// </summary>
-        public BigInteger Ttl { get; set; }
+        public TimeSpan Ttl { get; set; }
 
         /// <summary>
         /// timestamp when the message was sent.

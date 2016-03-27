@@ -4,11 +4,11 @@ using System;
 
 namespace Eth.Json.Converters
 {
-    public class EthFilterOptionsConverter : JsonConverter
+    public class ShhPostConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(EthFilterOptions);
+            return objectType == typeof(ShhPost);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
@@ -24,26 +24,27 @@ namespace Eth.Json.Converters
                 return;
             }
 
-            var obj = value as EthFilterOptions;
-
-            if(obj == null)
-            {
-                throw new ArgumentOutOfRangeException("value");
-            }
+            var obj = value as ShhPost;
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("fromBlock");
-            serializer.Serialize(writer, obj.FromBlock);
+            writer.WritePropertyName("from");
+            serializer.Serialize(writer, obj.From);
 
-            writer.WritePropertyName("toBlock");
-            serializer.Serialize(writer, obj.ToBlock);
-
-            writer.WritePropertyName("address");
-            serializer.Serialize(writer, obj.Address);
+            writer.WritePropertyName("to");
+            serializer.Serialize(writer, obj.To);
 
             writer.WritePropertyName("topics");
             serializer.Serialize(writer, obj.Topics);
+
+            writer.WritePropertyName("payload");
+            serializer.Serialize(writer, obj.Payload);
+
+            writer.WritePropertyName("priority");
+            serializer.Serialize(writer, obj.Priority);
+
+            writer.WritePropertyName("ttl");
+            serializer.Serialize(writer, obj.Ttl);
 
             writer.WriteEndObject();
         }
