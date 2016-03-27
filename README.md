@@ -40,7 +40,7 @@ We can easily make use of EthClient's built-in Abi encoding/decoding!
     {
         // byte[] contractAddress = ...;
         EthContract exampleContract = client.GetContractAt(contractAddress);
-        var answer = await exampleContract.CallAsync<UInt256AbiValue>(new UInt256AbiValue(42), new UInt256AbiValue(24));
+        var answer = await exampleContract.CallAsync<UInt256AbiValue>("Multiply", new UInt256AbiValue(42), new UInt256AbiValue(24));
         Console.WriteLine("The answer is {0}!", (BigInteger)answer);
     }
 
