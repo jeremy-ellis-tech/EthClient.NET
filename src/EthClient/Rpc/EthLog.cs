@@ -8,7 +8,7 @@ namespace Eth.Rpc
         /// <summary>
         /// pending when the log is pending. mined if log is already mined.
         /// </summary>
-        public EthLogType Type { get; set; }
+        public EthLogType? Type { get; set; }
 
         /// <summary>
         /// integer of the log index position in the block. null when its pending log.
@@ -49,5 +49,12 @@ namespace Eth.Rpc
         /// Array of 0 to 4 32 Bytes DATA of indexed log arguments. (In solidity: The first topic is the hash of the signature of the event
         /// </summary>
         public IEnumerable<byte[]> Topics { get; set; }
+
+        /// <summary>
+        /// Array of log objects, or an empty array if nothing has changed since last poll.
+        /// For filters created with eth_newBlockFilter the return are block hashes
+        /// For filters created with eth_newPendingTransactionFilter the return are transaction hashes 
+        /// </summary>
+        public IEnumerable<byte[]> Hashes { get; set; }
     }
 }

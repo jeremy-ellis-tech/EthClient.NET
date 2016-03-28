@@ -16,62 +16,72 @@ namespace Eth.Json.Converters
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             EthLog ethLog = new EthLog();
-            int startingDepth = reader.Depth;
-
-            while (!(reader.TokenType == JsonToken.EndObject && startingDepth == reader.Depth))
+            
+            switch (reader.TokenType)
             {
-                reader.Read();
+                case JsonToken.StartObject:
+                    int startingDepth = reader.Depth;
+                    while (!(reader.TokenType == JsonToken.EndObject && startingDepth == reader.Depth))
+                    {
+                        reader.Read();
 
-                if(reader.TokenType == JsonToken.PropertyName)
-                {
-                    string propertyName = reader.Value.ToString();
+                        if (reader.TokenType == JsonToken.PropertyName)
+                        {
+                            string propertyName = reader.Value.ToString();
 
-                    if(String.Equals(propertyName, "type"))
-                    {
-                        reader.Read();
-                        serializer.Deserialize<EthLogType>(reader);
+                            if (String.Equals(propertyName, "type"))
+                            {
+                                reader.Read();
+                                ethLog.Type = serializer.Deserialize<EthLogType?>(reader);
+                            }
+                            else if (String.Equals(propertyName, "logIndex"))
+                            {
+                                reader.Read();
+                                ethLog.LogIndex = serializer.Deserialize<BigInteger>(reader);
+                            }
+                            else if (String.Equals(propertyName, "blockNumber"))
+                            {
+                                reader.Read();
+                                ethLog.BlockNumber = serializer.Deserialize<BigInteger>(reader);
+                            }
+                            else if (String.Equals(propertyName, "blockHash"))
+                            {
+                                reader.Read();
+                                ethLog.BlockHash = serializer.Deserialize<byte[]>(reader);
+                            }
+                            else if (String.Equals(propertyName, "transactionHash"))
+                            {
+                                reader.Read();
+                                ethLog.TransactionHash = serializer.Deserialize<byte[]>(reader);
+                            }
+                            else if (String.Equals(propertyName, "transactionIndex"))
+                            {
+                                reader.Read();
+                                ethLog.TransactionIndex = serializer.Deserialize<BigInteger>(reader);
+                            }
+                            else if (String.Equals(propertyName, "address"))
+                            {
+                                reader.Read();
+                                ethLog.Address = serializer.Deserialize<byte[]>(reader);
+                            }
+                            else if (String.Equals(propertyName, "data"))
+                            {
+                                reader.Read();
+                                ethLog.Data = serializer.Deserialize<byte[]>(reader);
+                            }
+                            else if (String.Equals(propertyName, "topics"))
+                            {
+                                reader.Read();
+                                ethLog.Topics = serializer.Deserialize<IEnumerable<byte[]>>(reader);
+                            }
+                        }
                     }
-                    else if (String.Equals(propertyName, "logIndex"))
-                    {
-                        reader.Read();
-                        serializer.Deserialize<BigInteger>(reader);
-                    }
-                    else if(String.Equals(propertyName, "blockNumer"))
-                    {
-                        reader.Read();
-                        serializer.Deserialize<BigInteger>(reader);
-                    }
-                    else if (String.Equals(propertyName, "blockHash"))
-                    {
-                        reader.Read();
-                        serializer.Deserialize<byte[]>(reader);
-                    }
-                    else if (String.Equals(propertyName, "transactionHash"))
-                    {
-                        reader.Read();
-                        serializer.Deserialize<byte[]>(reader);
-                    }
-                    else if (String.Equals(propertyName, "transactionIndex"))
-                    {
-                        reader.Read();
-                        serializer.Deserialize<BigInteger>(reader);
-                    }
-                    else if (String.Equals(propertyName, "address"))
-                    {
-                        reader.Read();
-                        serializer.Deserialize<byte[]>(reader);
-                    }
-                    else if (String.Equals(propertyName, "data"))
-                    {
-                        reader.Read();
-                        serializer.Deserialize<byte[]>(reader);
-                    }
-                    else if (String.Equals(propertyName, "topics"))
-                    {
-                        reader.Read();
-                        serializer.Deserialize<IEnumerable<byte[]>>(reader);
-                    }
-                }
+                    break;
+                case JsonToken.StartArray:
+                    ethLog.Hashes = serializer.Deserialize<IEnumerable<byte[]>>(reader);
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
 
             return ethLog;

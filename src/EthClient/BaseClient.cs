@@ -629,10 +629,10 @@ namespace Eth
         /// </summary>
         /// <param name="filterId"> the filter id.</param>
         /// <returns>Array of log objects, or an empty array if nothing has changed since last poll.</returns>
-        public async Task<IEnumerable<EthLog>> EthGetFilterChangesAsync(BigInteger filterId)
+        public async Task<EthLog> EthGetFilterChangesAsync(BigInteger filterId)
         {
             RpcRequest request = BuildRpcRequest("eth_getFilterChanges", filterId);
-            RpcResponse<IEnumerable<EthLog>> rpcResponse = await PostRpcRequestAsync<IEnumerable<EthLog>>(request);
+            RpcResponse<EthLog> rpcResponse = await PostRpcRequestAsync<EthLog>(request);
             return rpcResponse.Result;
         }
 
@@ -641,10 +641,10 @@ namespace Eth
         /// </summary>
         /// <param name="filterOptions">the filter object</param>
         /// <returns>Array of log objects, or an empty array if nothing has changed since last poll</returns>
-        public async Task<EthLog> EthGetLogsAsync(EthFilterOptions filterOptions)
+        public async Task<IList<EthLog>> EthGetLogsAsync(EthFilterOptions filterOptions)
         {
-            RpcRequest request = BuildRpcRequest("eth_getLogs", new { fromBlock = filterOptions.FromBlock, toBlock = filterOptions.ToBlock, address = filterOptions.Address, topics = filterOptions.Topics });
-            RpcResponse<EthLog> rpcResponse = await PostRpcRequestAsync<EthLog>(request);
+            RpcRequest request = BuildRpcRequest("eth_getLogs", filterOptions);
+            RpcResponse<IList<EthLog>> rpcResponse = await PostRpcRequestAsync<IList<EthLog>>(request);
             return rpcResponse.Result;
         }
 
@@ -701,6 +701,7 @@ namespace Eth
         /// <param name="keyName">Key name</param>
         /// <param name="value">String to store</param>
         /// <returns>returns true if the value was stored, otherwise false</returns>
+        [Obsolete("This function is deprecated and will be removed in the future")]
         public async Task<bool> DbPutStringAsync(string dbName, string keyName, string value)
         {
             RpcRequest request = BuildRpcRequest("db_putString", dbName, keyName, value);
@@ -714,6 +715,7 @@ namespace Eth
         /// <param name="dbName">Database name</param>
         /// <param name="keyName">Key name</param>
         /// <returns>The previously stored string</returns>
+        [Obsolete("This function is deprecated and will be removed in the future")]
         public async Task<string> DbGetStringAsync(string dbName, string keyName)
         {
             RpcRequest request = BuildRpcRequest("db_getString", dbName, keyName);
@@ -728,6 +730,7 @@ namespace Eth
         /// <param name="keyName">Key name</param>
         /// <param name="data">The data to store</param>
         /// <returns>returns true if the value was stored, otherwise false</returns>
+        [Obsolete("This function is deprecated and will be removed in the future")]
         public async Task<bool> DbPutHexAsync(string dbName, string keyName, byte[] data)
         {
             RpcRequest request = BuildRpcRequest("db_putHex", dbName, keyName, data);
@@ -741,6 +744,7 @@ namespace Eth
         /// <param name="dbName">Database name</param>
         /// <param name="keyName">Key name</param>
         /// <returns>The previously stored data</returns>
+        [Obsolete("This function is deprecated and will be removed in the future")]
         public async Task<byte[]> DbGetHexAsync(string dbName, string keyName)
         {
             RpcRequest request = BuildRpcRequest("db_getHex", dbName, keyName);

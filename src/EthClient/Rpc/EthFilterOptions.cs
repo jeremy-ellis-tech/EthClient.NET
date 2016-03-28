@@ -22,6 +22,6 @@ namespace Eth.Rpc
         /// <summary>
         /// Array of 32 Bytes DATA topics. Topics are order-dependent. Each topic can also be an array of DATA with "or" options.
         /// </summary>
-        public IList<EthTopic> Topics { get; set; }
+        public EthTopic Topics { get; set; }
     }
 }

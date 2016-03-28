@@ -43,7 +43,17 @@ namespace Eth.Json.Converters
             serializer.Serialize(writer, obj.Address);
 
             writer.WritePropertyName("topics");
-            serializer.Serialize(writer, obj.Topics);
+            if(obj.Topics == null)
+            {
+                writer.WriteNull();
+            }
+            else
+            {
+                bool wrapInArray = obj.Topics.Topics == null;
+                if (wrapInArray) writer.WriteStartArray();
+                serializer.Serialize(writer, obj.Topics);
+                if (wrapInArray) writer.WriteEndArray();
+            }
 
             writer.WriteEndObject();
         }

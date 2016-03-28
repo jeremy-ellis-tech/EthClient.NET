@@ -1,6 +1,7 @@
 ﻿using Eth;
 using Eth.Json;
 using Eth.Rpc;
+using Eth.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -167,6 +168,22 @@ namespace EthClient.Test
             expected = new EthSyncing(1, 2, 3);
             actual = _serializer.Deserialize<EthSyncing>(json);
             Assert.IsTrue(Equals(expected, actual));
+        }
+
+        [TestMethod]
+        public void EthTopicShouldBeSerializedCorrectly()
+        {
+            EthTopic topic0 = new EthTopic(EthHex.HexStringToByteArray("0x000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc"));
+            EthTopic topic1 = new EthTopic(EthHex.HexStringToByteArray("0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b"));
+            EthTopic topic3 = new EthTopic(topic1, topic0);
+            EthTopic topic4 = new EthTopic();
+            EthTopic topic5 = new EthTopic(EthHex.HexStringToByteArray("0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b"));
+            EthTopic topic6 = new EthTopic(topic5, topic4, topic3);
+
+            string expected = "[\"0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b\",null,[\"0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b\",\"0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc\"]]".ToUpperInvariant();
+            string actual = _serializer.Serialize(topic6).ToUpperInvariant();
+
+            Assert.IsTrue(String.Equals(expected, actual));
         }
     }
 }

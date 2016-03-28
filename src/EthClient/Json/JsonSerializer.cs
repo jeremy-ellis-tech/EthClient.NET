@@ -1,4 +1,5 @@
 ﻿using Eth.Json.Converters;
+using Eth.Rpc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Numerics;
@@ -20,11 +21,17 @@ namespace Eth.Json
                     new BigIntegerConverter(),
                     new TimeSpanConverter(),
                     new NullableConverter<BigInteger>(),
+
+                    new EthLogConverter(),
                     new DefaultBlockConverter(),
                     new EthSyncingConverter(),
                     new EthBlockConverter(),
+                    new EthLogTypeConverter(),
+                    new NullableConverter<EthLogType>(),
                     new DateTimeOffsetConverter(),
+                    new EthTopicConverter(),
                     new EthWorkConverter(),
+                    new EthFilterOptionsConverter(),
                     new RpcRequestConverter(),
                     new EthTransactionConverter(),
                     new EthSolidityContractConverter(),
